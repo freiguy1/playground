@@ -1,0 +1,132 @@
+
+
+@()
+
+@main {
+
+    <style type="text/css">
+        .glyphicon-remove-sign {
+            color: #d9534f;
+        }
+        .beltRow .glyphicon-remove-sign {
+            visibility: hidden;
+        }
+        .beltRow:hover .glyphicon-remove-sign {
+            visibility: visible;
+        }
+    </style>
+</head>
+<body style="padding: 5px;">    
+    <!-- ko if: activeSystem() -->
+    <ul class="nav nav-tabs">
+        <!-- ko foreach: systems -->
+        <!-- ko if: isActive -->
+        <li class="active" data-bind="click: $root.tabClicked"><a>
+            <span data-bind="text: name"></span>
+                                                                   <span style="padding-left: 5px; " class="glyphicon glyphicon-remove-sign" data-bind="click: $root.removeSystemClicked, clickBubble: false"></span>
+        </a></li>
+        <!-- /ko -->
+        <!-- ko ifnot: isActive -->
+        <li data-bind="click: $root.tabClicked"><a data-bind="style: { backgroundColor: backgroundColor }">
+    <span data-bind="text: name"></span>
+    <span style="padding-left: 5px; " class="glyphicon glyphicon-remove-sign" data-bind="click: $root.removeSystemClicked, clickBubble: false"></span>
+</a></li>
+        <!-- /ko -->
+        <!-- /ko -->
+        <li data-bind="click: $root.addSystemClicked"><a>+</a></li>
+    </ul>
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Asteroid Belt</th>
+                <th>Last Checked</th>
+                <th>Has Rats</th>
+                <th>Is Empty</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko with: activeSystem -->
+            <!-- ko foreach: belts -->
+            <tr class="beltRow" data-bind="style: { backgroundColor: backgroundColor }">
+                <td style="padding-top: 15px;" >
+                    <span class="glyphicon glyphicon-remove-sign" data-bind="click: $root.removeBeltClicked"></span>
+                </td>
+                <td style="padding-top: 15px;">
+                    <span>Planet </span><span data-bind="text: planet"></span><span> Belt </span><span data-bind="text: belt"></span>
+                </td>
+                <td style="padding-top: 15px;">
+                    <span data-bind="text: lastCheckedDisplay"></span>
+                </td>
+                <td style="padding-top: 15px;">
+                    <span data-bind="text: ratsDisplay"></span>
+                </td>
+                <td style="padding-top: 15px;">
+                    <span data-bind="text: emptyDisplay"></span>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" data-bind="click: $root.hasRatsClicked">Has Rats</button>
+                        <button type="button" class="btn btn-default" data-bind="click: $root.isEmptyClicked">Is Empty</button>
+                        <button type="button" class="btn btn-default" data-bind="click: $root.clearClicked">Clear</button>
+                    </div>
+                </td>
+            </tr>
+            <!-- /ko -->
+            <!-- /ko -->
+        </tbody>
+    </table>
+    <div style="text-align: center;">
+        <button type="button" class="btn btn-default" data-bind="click: $root.addBeltClicked">Add Belt</button>
+    </div>
+    <!-- /ko -->    
+    <!-- ko if: !activeSystem() -->
+    <div style="text-align: center; padding-top:70px">
+        <button type="button" class="btn btn-lg btn-primary" data-bind="click: $root.addSystemClicked">Add a System to get Started!</button>
+    </div>
+    <!-- /ko -->
+    <div class="modal fade" id="addSystemModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add System</h4>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group">
+                            <input id="addSystemNameInput" type="text" class="form-control" placeholder="System Name" data-bind="value: addSystemName, valueUpdate: 'keypress'">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-bind="click: addSystemModalClicked">Add System</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <div class="modal fade" id="addBeltModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Add Asteroid Belt</h4>
+                </div>
+                <div class="modal-body">
+                        <div class="form-group">
+                            <input id="addBeltPlanetNumInput" type="text" class="form-control" placeholder="Planet Number (i.e. VII)" data-bind="value: addBeltPlanetNum, valueUpdate: 'keypress'">
+                        </div>
+                        <div class="form-group">
+                            <input id="addBeltBeltNameInput" type="text" class="form-control" placeholder="Belt Number (i.e. 3)" data-bind="value: addBeltBeltNum, valueUpdate: 'keypress'">
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-bind="click: addBeltModalClicked">Add Belt</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+}
