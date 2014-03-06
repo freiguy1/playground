@@ -18,5 +18,5 @@ RUNNING_PID
 *.swp
 
 # SENSITIVE INFORMATION
-application.conf
-securesocial.conf
+/conf/application.conf
+/conf/securesocial.conf
