@@ -16,3 +16,7 @@ RUNNING_PID
 /.idea/
 /.idea*
 *.swp
+
+# SENSITIVE INFORMATION
+application.conf
+securesocial.conf
