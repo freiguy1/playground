@@ -9,7 +9,11 @@ GET     /                           controllers.Application.index
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 
-
+#####################################
+#           BALANCE                 #
+#####################################
+GET	/balance		    controllers.balance.Application.index
+POST	/balance		    controllers.balance.Application.addTransaction(amount: Double, note: Option[String])
 
 #####################################
 #             CLONE                 #
