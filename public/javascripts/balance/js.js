@@ -1,6 +1,12 @@
 $(function () {
     initViewModel()
     ko.applyBindings(viewModel)
+
+    $('#transactionAmountInput, #transactionNoteInput').keypress(function (event) {
+        if (event.which == 13)
+            viewModel.transactClicked()
+    })
+
 })
 
 function initViewModel(){
@@ -21,6 +27,7 @@ viewModel.balanceAmountDisplay = ko.computed(function(){
 
 viewModel.transactClicked = function(data, event) {
     ajax.addTransaction($('#transactionAmountInput').val(), $('#transactionNoteInput').val()).done(function(result){
+	$('#transactionAmountInput, #transactionNoteInput').val('')
 	fillFromResponse(result)	
     })
 }
