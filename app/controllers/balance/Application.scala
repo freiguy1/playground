@@ -1,15 +1,26 @@
-package controllers.clone
+package controllers.balance
 
 import play.api._
 import play.api.mvc._
 
-object Application extends Controller {
+import controllers.balance.JsonConverters._
+import play.api.libs.json._
 
-  def index = Action {
-    Ok(views.html.clone.index())
+object Application extends Controller with securesocial.core.SecureSocial {
+
+  def index = SecuredAction { implicit request => 
+    val userInfo = request.user.asInstanceOf[models.MyIdentity].userInfo
+    Ok(views.html.balance.index(models.balance.Balance.getByUserId(userInfo.userId)))
   }
 
-  def itsMe = Action{
-    Redirect(routes.Application.index).withCookies(Cookie("itsMe", "true"))
+  def addTransaction(amount: Double, note: Option[String]) = SecuredAction { implicit request =>
+    val userInfo = request.user.asInstanceOf[models.MyIdentity].userInfo
+    models.balance.Balance.addTransaction(userInfo.userId, amount, note) 
+    Ok(Json.toJson(models.balance.Balance.getByUserId(userInfo.userId)))
+  }
+
+  def getInfo = SecuredAction { implicit request =>
+    val userInfo = request.user.asInstanceOf[models.MyIdentity].userInfo
+    Ok(Json.toJson(models.balance.Balance.getByUserId(userInfo.userId)))
   }
 }

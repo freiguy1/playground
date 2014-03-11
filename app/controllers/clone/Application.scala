@@ -1,18 +1,15 @@
-package controllers.balance
+package controllers.clone
 
 import play.api._
 import play.api.mvc._
 
-object Application extends Controller with securesocial.core.SecureSocial {
+object Application extends Controller {
 
-  def index = SecuredAction { implicit request => 
-    val userInfo = request.user.asInstanceOf[models.MyIdentity].userInfo
-    Ok(views.html.balance.index(models.balance.Balance.getByUserId(userInfo.userId)))
+  def index = Action {
+    Ok(views.html.clone.index())
   }
 
-  def addTransaction(amount: Double, note: Option[String]) = SecuredAction { implicit request =>
-    val userInfo = request.user.asInstanceOf[models.MyIdentity].userInfo
-    models.balance.Balance.addTransaction(userInfo.userId, amount, note) 
-    Ok("Transaction recorded") 
+  def itsMe = Action{
+    Redirect(routes.Application.index).withCookies(Cookie("itsMe", "true"))
   }
 }

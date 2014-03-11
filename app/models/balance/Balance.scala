@@ -9,7 +9,7 @@ import scala.slick.driver.MySQLDriver.simple._
 import Database.dynamicSession
 
 case class Balance(balanceid: Int, userid: Int, amount: Double, transactions: Seq[Transaction])
-case class Transaction(transactionid: Int, userid: Int, amount: Double, time: java.sql.Timestamp, note: Option[String])
+case class Transaction(transactionid: Int, userid: Int, amount: Double, time: java.util.Date, note: Option[String])
 
 object Balance{
 
