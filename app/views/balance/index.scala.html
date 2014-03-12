@@ -3,19 +3,30 @@
 @main {
 
     <div class="container">
-        <h1>The Balance Keeper <small>keeping your balance since 2014</small></h1>
+        <h1>the balance keeper <small>keeping your balance since 2014</small></h1>
 	<div class="row">
 	    <div class="col-md-6">
 		<h1 data-bind="text: balanceAmountDisplay" style="text-align: center;">@balance.amount</h1>
 		<form class="form-inline" style="text-align: center;" role="form">
 		    <div class="form-group">
-			<input type="number" class="form-control" id="transactionAmountInput" placeholder="Amount (+/-)" step=".25" required>
+			<input type="number" class="form-control" id="transactionAmountInput" placeholder="amount (+/-)" step=".25" required>
 		    </div>
 		    <div class="form-group">
-			<input type="text" class="form-control" id="transactionNoteInput" placeholder="Note (Optional)" >
+			<input type="text" class="form-control" id="transactionNoteInput" placeholder="note (optional)" >
 		    </div>
-		    <button type="button" class="btn btn-default" data-bind="click: transactClicked">Transact!</button>
+		    <button type="button" class="btn btn-default" data-bind="click: transactClicked">transact!</button>
 		</form>
+		<h4 style="margin-top: 40px; text-align: center;">I just bought a...</h4>
+		<div class="text-center">
+		    <div class="btn-group">
+			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-.5, 'pop') }">can o' pop</button>
+			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-.5, 'water') }">water</button>
+			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-5, 'pizza') }">pizza</button>
+			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-2, 'small pizza') }">small pizza</button>
+			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-2, 'red bull') }">red bull</button>
+			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-1, 'snack') }">snack</button>
+		    </div>
+		</div>
 	    </div>
 	    
 	    <div class="col-md-6">

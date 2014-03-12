@@ -32,6 +32,12 @@ viewModel.transactClicked = function(data, event) {
     })
 }
 
+viewModel.boughtClicked = function(amount, note) {
+    ajax.addTransaction(amount, note).done(function(result){
+	fillFromResponse(result)	
+    })
+}
+
 function fillFromResponse(response){
     viewModel.balanceAmount(response.amount)
     viewModel.transactions.removeAll()
