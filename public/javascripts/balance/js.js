@@ -20,7 +20,7 @@ var viewModel = {
 
 viewModel.balanceAmountDisplay = ko.computed(function(){
     if(viewModel.balanceAmount())
-        return "$" + viewModel.balanceAmount().toFixed(2)
+        return getDollarString(viewModel.balanceAmount())
     else
 	return ""
 })
@@ -34,9 +34,39 @@ viewModel.transactClicked = function(data, event) {
 
 function fillFromResponse(response){
     viewModel.balanceAmount(response.amount)
+    viewModel.transactions.removeAll()
+    $.each(response.transactions.reverse(), function(index, value){
+	viewModel.transactions.push(new Transaction(value.id, value.amount, value.time, value.note))
+    })
 }
 
+function Transaction(id, amount, time, note) {
+    var me = this
+    me.id = id
+    me.amount = ko.observable(amount)
+    me.time = ko.observable(time)
+    me.note = ko.observable(note)
+    me.timeDisplay = ko.computed(function (){
+	return getDateString(new Date(me.time()))
+    })
+    me.amountDisplay = ko.computed(function (){
+	return getDollarString(me.amount())	
+    })
+}
 
+function getDollarString(amount){
+    return "$" + amount.toFixed(2)
+}
+
+function getDateString(date){
+    var minute = date.getMinutes()
+    var hour = date.getHours()
+    var ampm = hour >= 12 ? 'pm' : 'am'
+    hour = hour % 12
+    hour = hour ? hour: 12
+    minute = minute < 10 ? '0'+minute : minute
+    return date.getMonth() + "-" + date.getDate() + "-" + date.getFullYear() + "   " + hour + ":" + minute + " " + ampm
+}
 
 /*--------------- AJAX -------------*/
 
