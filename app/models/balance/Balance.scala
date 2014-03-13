@@ -37,10 +37,12 @@ object Balance{
   }
 
   def addTransaction(userId: Int, amount: Double, note: Option[String]): Unit = database.withDynSession {
+    val roundedAmount = (math floor(amount * 100)) / 100
     val currentBalance = getByUserId(userId)
-    val newTransaction = db.Tables.TransactionRow(0, userId, amount, new java.sql.Timestamp((new java.util.Date()).getTime()), note)
+    val newTransaction = db.Tables.TransactionRow(0, userId, roundedAmount, new java.sql.Timestamp((new java.util.Date()).getTime()), note)
     db.Tables.Transaction += newTransaction
-    (for (balance <- db.Tables.Balance if balance.balanceid === currentBalance.balanceid) yield balance.amount).update(currentBalance.amount + amount)
+    val newBalance = (math floor((currentBalance.amount + roundedAmount) * 100)) / 100
+    (for (balance <- db.Tables.Balance if balance.balanceid === currentBalance.balanceid) yield balance.amount).update(newBalance)
   }
 }
 
