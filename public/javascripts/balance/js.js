@@ -19,7 +19,7 @@ var viewModel = {
 }
 
 viewModel.balanceAmountDisplay = ko.computed(function(){
-    if(viewModel.balanceAmount())
+    if(viewModel.balanceAmount() || viewModel.balanceAmount() === 0)
         return getDollarString(viewModel.balanceAmount())
     else
 	return ""
