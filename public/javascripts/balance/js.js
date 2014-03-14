@@ -44,6 +44,58 @@ function fillFromResponse(response){
     $.each(response.transactions.reverse(), function(index, value){
 	viewModel.transactions.push(new Transaction(value.id, value.amount, value.time, value.note))
     })
+
+    // Fill the line graph
+    var currentTime = new Date()
+    var lineGraphData = [[currentTime.getTime(), response.amount]]
+    if(response.transactions.length > 0 && response.transactions[0].time > currentTime.getTime())
+	lineGraphData = []
+    var movingBalance = response.amount
+    var minBalance = 0
+    var maxBalance = 10
+    $.each(response.transactions, function(index, value){
+	lineGraphData.push([value.time, movingBalance])
+	maxBalance = movingBalance > maxBalance ? movingBalance : maxBalance
+	minBalance = movingBalance < minBalance ? movingBalance : minBalance
+	movingBalance = movingBalance - value.amount;
+    })
+    if(lineGraphData.length > 1){
+	$.plot($('#line-graph'), [lineGraphData], {
+	    yaxis: { min: minBalance, max: maxBalance,
+		tickFormatter: function(val, axis) { return "$" + val }
+	    },
+	    xaxis: { mode: "time" , twelveHourClock: true, timezone: "browser" },
+	    hoverable: true
+	})
+    }
+
+    // Fill in the pie graph
+    var pieGraphMap = []
+    var pieGraphData = []
+    $.each(response.transactions, function(index, value) {
+	if(value.note && value.amount < 0){
+	    if(pieGraphMap[value.note] % 1 === 0)
+		pieGraphData[pieGraphMap[value.note]] = { label: value.note, data: pieGraphData[pieGraphMap[value.note]].data - value.amount } 
+	    else
+		pieGraphMap[value.note] = pieGraphData.push({ label: value.note, data: 0 - value.amount }) - 1
+	}
+    })
+    if(pieGraphData.length > 0)
+	$.plot($('#pie-graph'), pieGraphData, {
+	    series: {
+		pie: {
+		    show: true,
+		    label: {
+		      formatter: function(label, series){
+			return '<div style="text-align: center; font-size: 8pt;">' + label + '<br /> $' + series.data[0][1].toFixed(2) + ', ' + series.percent.toFixed(1) + '%</div>'
+		      }
+		    }
+		}
+	    },
+	    legend: {
+		show: false
+	    }
+	})
 }
 
 function Transaction(id, amount, time, note) {
