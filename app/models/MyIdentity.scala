@@ -75,7 +75,7 @@ object MyIdentity{
 	  
       // update identity
       val query = for(dbIdentity2 <- identityTable if(dbIdentity2.userSSId === dbIdentity.userSSId && dbIdentity2.providerId === dbIdentity.providerId)) yield dbIdentity2
-      query.update(db.Identity(dbIdentity.providerId, dbIdentity.userSSId, identity.firstName, identity.lastName, identity.fullName, identity.email, identity.avatarUrl, dbIdentity.oAuth1InfoId, dbIdentity.oAuth2InfoId, dbIdentity.passwordInfoId, identity.authMethod.method))
+      query.update(db.Identity(dbIdentity.providerId, dbIdentity.userSSId, dbIdentity.userId, identity.firstName, identity.lastName, identity.fullName, identity.email, identity.avatarUrl, dbIdentity.oAuth1InfoId, dbIdentity.oAuth2InfoId, dbIdentity.passwordInfoId, identity.authMethod.method))
 
       // fetch recently updated identity
       findByIdentityId(IdentityId(identity.identityId.userId, identity.identityId.providerId)).get
@@ -84,7 +84,7 @@ object MyIdentity{
       // User doesn't exist, creating...
       require(identity.email.isDefined)
       // create user
-      userTable insert db.User(None, identity.identityId.userId, identity.email.get)
+      val myUserId = userTable returning userTable.map(_.userId) insert db.User(None, identity.email.get)
       // create oAuth1Info
       val oAuth1InfoId : Option[Int] = identity.oAuth1Info.map(oAuth1Info =>{
         oAuth1InfoTable returning oAuth1InfoTable.map(_.oAuth1InfoId) insert new db.OAuth1Info(None, oAuth1Info.token, oAuth1Info.secret)
@@ -100,7 +100,7 @@ object MyIdentity{
 
       
       //create identity using these new ids.
-      identityTable insert db.Identity(identity.identityId.providerId, identity.identityId.userId, identity.firstName, identity.lastName, identity.fullName, identity.email, identity.avatarUrl, oAuth1InfoId, oAuth2InfoId, passwordInfoId, identity.authMethod.method)
+      identityTable insert db.Identity(identity.identityId.providerId, identity.identityId.userId, myUserId, identity.firstName, identity.lastName, identity.fullName, identity.email, identity.avatarUrl, oAuth1InfoId, oAuth2InfoId, passwordInfoId, identity.authMethod.method)
       
       // fetch recently added identity
       findByIdentityId(IdentityId(identity.identityId.userId, identity.identityId.providerId)).get
@@ -112,13 +112,13 @@ object MyIdentity{
     val query = for(dbUser <- userTable if dbUser.userId === updatedUserInfo.userId) yield dbUser
     query.firstOption.map(dbUser => {
       val updateQuery = for(thing <- userTable if thing.userId === updatedUserInfo.userId) yield thing
-      updateQuery.update(db.User(Some(updatedUserInfo.userId), dbUser.userSSId, updatedUserInfo.email))
+      updateQuery.update(db.User(Some(updatedUserInfo.userId), updatedUserInfo.email))
     }).getOrElse(throw new NoSuchElementException)
   }
 
 
   private def createMyIdentityFromDbIdentity(dbIdentity: db.Identity): MyIdentity = {
-    val query = for(dbUser <- userTable if dbUser.userSSId === dbIdentity.userSSId) yield dbUser
+    val query = for(dbUser <- userTable if dbUser.userId === dbIdentity.userId) yield dbUser
     val dbUser = query.firstOption.get
     val userInfo = new UserInfo(
       dbUser.userId.get,

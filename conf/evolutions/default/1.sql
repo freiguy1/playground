@@ -2,11 +2,7 @@
 
 CREATE TABLE user (
 	userId INT AUTO_INCREMENT,
-	userSSId VARCHAR(128) NOT NULL UNIQUE,
 	email VARCHAR(128) NOT NULL,
---	hasCompletedRegistration BOOLEAN NOT NULL,
---	isManager BOOLEAN NOT NULL,
---	phoneNumber VARCHAR(10),
 	PRIMARY KEY(userId));
 	
 CREATE TABLE passwordInfo (
@@ -33,6 +29,7 @@ CREATE TABLE oAuth2Info(
 CREATE TABLE identity (
 	providerId VARCHAR(64),
 	userSSId VARCHAR(64),
+	userId INT NOT NULL,
 	firstName VARCHAR(64) NOT NULL,
 	lastName VARCHAR(64) NOT NULL,
 	fullName VARCHAR(128) NOT NULL,
@@ -43,7 +40,7 @@ CREATE TABLE identity (
 	passwordInfoId INT,
 	authenticationMethod VARCHAR(64),
 	PRIMARY KEY(providerId, userSSId),
-	FOREIGN KEY(userSSId) REFERENCES user(userSSId),
+	FOREIGN KEY(userId) REFERENCES user(userId),
 	FOREIGN KEY(oAuth1InfoId) REFERENCES oAuth1Info(oAuth1InfoId),
 	FOREIGN KEY(oAuth2InfoId) REFERENCES oAuth2Info(oAuth2InfoId),
 	FOREIGN KEY(passwordInfoId) REFERENCES passwordInfo(passwordInfoId));
