@@ -6,8 +6,15 @@ $(function () {
         if (event.which == 13)
             viewModel.transactClicked()
     })
+    
+    $( window ).resize(function(){
+	fillLineGraph()
+	fillPieGraph()
+    })
 
 })
+
+
 
 function initViewModel(){
    ajax.info().done(function(result){ fillFromResponse(result) }) 
@@ -15,7 +22,8 @@ function initViewModel(){
 
 var viewModel = {
     balanceAmount: ko.observable(),
-    transactions: ko.observableArray([])
+    transactions: ko.observableArray([]),
+    xMinimum: ko.observable("week")
 }
 
 viewModel.balanceAmountDisplay = ko.computed(function(){
@@ -38,6 +46,11 @@ viewModel.boughtClicked = function(amount, note) {
     })
 }
 
+viewModel.graphListener = ko.computed(function() {
+    thing = viewModel.xMinimum()
+    fillLineGraph()
+})
+
 function fillFromResponse(response){
     viewModel.balanceAmount(response.amount)
     viewModel.transactions.removeAll()
@@ -45,39 +58,20 @@ function fillFromResponse(response){
 	viewModel.transactions.push(new Transaction(value.id, value.amount, value.time, value.note))
     })
 
-    // Fill the line graph
-    var currentTime = new Date()
-    var lineGraphData = [[currentTime.getTime(), response.amount]]
-    if(response.transactions.length > 0 && response.transactions[0].time > currentTime.getTime())
-	lineGraphData = []
-    var movingBalance = response.amount
-    var minBalance = 0
-    var maxBalance = 10
-    $.each(response.transactions, function(index, value){
-	lineGraphData.push([value.time, movingBalance])
-	maxBalance = movingBalance > maxBalance ? movingBalance : maxBalance
-	minBalance = movingBalance < minBalance ? movingBalance : minBalance
-	movingBalance = movingBalance - value.amount;
-    })
-    if(lineGraphData.length > 1){
-	$.plot($('#line-graph'), [lineGraphData], {
-	    yaxis: { min: minBalance, max: maxBalance,
-		tickFormatter: function(val, axis) { return "$" + val }
-	    },
-	    xaxis: { mode: "time" , twelveHourClock: true, timezone: "browser" },
-	    hoverable: true
-	})
-    }
+    fillLineGraph()
+    fillPieGraph()
+}
 
+function fillPieGraph() {
     // Fill in the pie graph
     var pieGraphMap = []
     var pieGraphData = []
-    $.each(response.transactions, function(index, value) {
-	if(value.note && value.amount < 0){
-	    if(pieGraphMap[value.note] % 1 === 0)
-		pieGraphData[pieGraphMap[value.note]] = { label: value.note, data: pieGraphData[pieGraphMap[value.note]].data - value.amount } 
+    $.each(viewModel.transactions(), function(index, value) {
+	if(value.note() && value.amount() < 0){
+	    if(pieGraphMap[value.note()] % 1 === 0)
+		pieGraphData[pieGraphMap[value.note()]] = { label: value.note(), data: pieGraphData[pieGraphMap[value.note()]].data - value.amount() } 
 	    else
-		pieGraphMap[value.note] = pieGraphData.push({ label: value.note, data: 0 - value.amount }) - 1
+		pieGraphMap[value.note()] = pieGraphData.push({ label: value.note(), data: 0 - value.amount() }) - 1
 	}
     })
     if(pieGraphData.length > 0)
@@ -96,6 +90,39 @@ function fillFromResponse(response){
 		show: false
 	    }
 	})
+}
+
+function fillLineGraph() {
+    // Fill the line graph
+    var currentTime = new Date()
+    var xMinimum
+    if(viewModel.xMinimum() === "week")
+	xMinimum = (new Date()).setDate(currentTime.getDate() - 7)
+    else
+	xMinimum = (new Date()).setMonth(currentTime.getMonth() - 1)
+
+    var lineGraphData = [[currentTime.getTime(), viewModel.balanceAmount()]]
+    if(viewModel.transactions().length > 0 && viewModel.transactions()[0].time() > currentTime.getTime())
+	lineGraphData = []
+    var movingBalance = viewModel.balanceAmount()
+    var minBalance = 0
+    var maxBalance = 10
+    $.each(viewModel.transactions(), function(index, value){
+	lineGraphData.push([value.time(), movingBalance])
+	maxBalance = movingBalance > maxBalance ? movingBalance : maxBalance
+	minBalance = movingBalance < minBalance ? movingBalance : minBalance
+	movingBalance = movingBalance - value.amount()
+    })
+    if(lineGraphData.length > 1){
+	$.plot($('#line-graph'), [lineGraphData], {
+	    yaxis: { min: minBalance, max: maxBalance,
+		tickFormatter: function(val, axis) { return "$" + val }
+	    },
+	    xaxis: { mode: "time" , twelveHourClock: true, timezone: "browser",
+		min: xMinimum },
+	    hoverable: true
+	})
+    }
 }
 
 function Transaction(id, amount, time, note) {
@@ -149,36 +176,24 @@ var ajax = {
 }
 
 
-/*
-
-function initViewModel() {
-    var allSystemListRequest = systemAjax.getAll()
-    var allBeltListRequest = beltAjax.getAll()
-    var getTimeRequest = getTime()
-    $.when(allSystemListRequest, allBeltListRequest, getTimeRequest).done(function(allSystemListResponse, allBeltListResponse, getTimeResponse){
-	$.each(allSystemListResponse[0], function(index, system){
-	    var beltArr = []
-	    $.each(allBeltListResponse[0], function(index, belt){
-		if(belt.systemId === system.systemId)
-		    beltArr.push(new Belt(belt.beltId, belt.planetNum, belt.beltNum, belt.hasRats, belt.lastChecked, belt.lastStatusChanged))
-	    })
-	    viewModel.systems.push(new System(system.systemId, system.name, (index === 0), beltArr))
-	})
-    viewModel.offset = (new Date(getTimeResponse[0].time).getTime()) - (new Date().getTime())	
-
-    })
+ko.bindingHandlers.bsChecked = {
+    init: function (element, valueAccessor, allBindingsAccessor,
+    viewModel, bindingContext) {
+        var value = valueAccessor();
+        var newValueAccessor = function () {
+            return {
+                change: function () {
+                    value(element.value);
+                }
+            }
+        };
+        ko.bindingHandlers.event.init(element, newValueAccessor,
+        allBindingsAccessor, viewModel, bindingContext);
+    },
+    update: function (element, valueAccessor, allBindingsAccessor,
+    viewModel, bindingContext) {
+        if ($(element).val() == ko.unwrap(valueAccessor())) {
+            $(element).closest('.btn').button('toggle');
+        }
+    }
 }
-
-var viewModel = {
-    currentTime: ko.observable(new Date().getTime() + this.offset),
-    systems: ko.observableArray([]),
-    addSystemName: ko.observable(""),
-    addBeltPlanetNum: ko.observable(""),
-    addBeltBeltNum: ko.observable(""),
-    offset: 0
-};
-
-systemBackgroundColor = ko.computed(function (data) {
-
-})
-*/

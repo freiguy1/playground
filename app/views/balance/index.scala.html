@@ -27,10 +27,18 @@
 			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-1, 'snack') }">snack</button>
 		    </div>
 		</div>
-
-		<div id="line-graph" style="height: 225px; margin: 20px 0px;"></div>
+		<div style="margin: 20px 0px; text-align: center;">
+		    <div class="btn-group" data-toggle="buttons" style="">
+			<label class="btn btn-default">
+			    <input type="radio" name="xMinimumToggle" value="month" data-bind="bsChecked: xMinimum">Last Month
+			</label>
+			<label class="btn btn-default">
+			    <input type="radio" name="xMinimumToggle" value="week" data-bind="bsChecked: xMinimum">Last Week 
+			</label>
+		    </div>
+		    <div id="line-graph" style="height: 225px;"></div>
+		</div>
 		<div id="pie-graph" style="height: 450px; margin: 20px 0px;"></div>
-	    
 	    </div>
 	    
 	    <div class="col-md-6">
