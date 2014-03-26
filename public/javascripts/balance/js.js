@@ -37,12 +37,17 @@ viewModel.transactClicked = function(data, event) {
     ajax.addTransaction($('#transactionAmountInput').val(), $('#transactionNoteInput').val()).done(function(result){
 	$('#transactionAmountInput, #transactionNoteInput').val('')
 	fillFromResponse(result)	
+    }).fail(function(){
+	location.reload()
     })
+
 }
 
 viewModel.boughtClicked = function(amount, note) {
     ajax.addTransaction(amount, note).done(function(result){
 	fillFromResponse(result)	
+    }).fail(function(){
+	location.reload()
     })
 }
 

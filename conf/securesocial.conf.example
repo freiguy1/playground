@@ -37,7 +37,8 @@ securesocial {
             #path=/
             #domain=some_domain
             #httpOnly=true
-            #idleTimeoutInMinutes=30
+	    # 9 hours of idle timeout for full workday
+            idleTimeoutInMinutes=540
             #absoluteTimeoutInMinutes=720
     }
 
