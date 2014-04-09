@@ -15,6 +15,7 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET	/balance		    controllers.balance.Application.index
 POST	/balance		    controllers.balance.Application.addTransaction(amount: Double, note: Option[String])
 GET	/balance/info		    controllers.balance.Application.getInfo
+PUT	/balance/clearTransactionsThrough/:transactionId controllers.balance.Application.clearTransactionsThrough(transactionId: Int)
 
 #####################################
 #             CLONE                 #

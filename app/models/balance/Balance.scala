@@ -16,7 +16,10 @@ object Balance{
   lazy private val database = Database.forDataSource(DB.getDataSource("default"))
   
   def get: Seq[Balance] = database.withDynSession {
-    val query = for(balance <- db.Tables.Balance; trans <- db.Tables.Transaction if trans.userid === balance.userid) yield (balance, trans)
+    val query = for(
+      balance <- db.Tables.Balance; 
+      trans <- db.Tables.Transaction if trans.userid === balance.userid
+    ) yield (balance, trans)
     val fullMap = query.list.groupBy(_._1.userid)
     fullMap.map(item => 
       Balance(item._2.head._1.balanceid, item._2.head._1.userid, item._2.head._1.amount, 
@@ -28,7 +31,8 @@ object Balance{
     val query = for(balance <- db.Tables.Balance if(balance.userid === userId)) yield balance
     query.firstOption.map{ dbBalance =>
       val query2 = for(transaction <- db.Tables.Transaction if(transaction.userid === userId)) yield transaction
-      val transList = query2.list.map(trans => Transaction(trans.transactionid, trans.userid, trans.amount, trans.time, trans.note)).toSeq
+      val transList = query2.list.map(trans => 
+        Transaction(trans.transactionid, trans.userid, trans.amount, trans.time, trans.note)).toSeq
       Balance(dbBalance.balanceid, userId, dbBalance.amount, transList)
     }.getOrElse{
       val balanceId = (db.Tables.Balance returning db.Tables.Balance.map(_.balanceid)) += db.Tables.BalanceRow(0, userId, 0)
@@ -43,6 +47,10 @@ object Balance{
     db.Tables.Transaction += newTransaction
     val newBalance = (math floor((currentBalance.amount + roundedAmount) * 100)) / 100
     (for (balance <- db.Tables.Balance if balance.balanceid === currentBalance.balanceid) yield balance.amount).update(newBalance)
+  }
+
+  def clearTransactionsThrough(transactionId: Int, userId: Int): Unit = database.withDynSession {
+    db.Tables.Transaction.filter(row => row.transactionid <= transactionId && row.userid === userId).delete
   }
 }
 

@@ -45,16 +45,31 @@
 		<table class="table">
 		    <thead>
 			<tr>
-			    <th>time</th><th>amount</th><th>note</th>
+			    <th>time</th><th>amount</th><th>note</th><th></th>
 			</tr>
 		    </thead>
 		    <tbody>
 			<!-- ko foreach: transactions -->
+			<!-- ko if: isInDeleteMode() -->
+			<tr style="background: #ffeef0">
+			    <td data-bind="text: timeDisplay"/>
+			       <td data-bind="text: amountDisplay"/>
+			       <td data-bind="text: note"/>
+			       <td>
+				    <span class="glyphicon glyphicon-trash" style="color: #d9534f; cursor: pointer;" data-bind="click: clearTransactionsThrough, event: { mouseover: mouseOver, mouseout: mouseOut}"/>
+			       </td>
+			    </tr>
+			<!-- /ko -->
+			<!-- ko if: !isInDeleteMode() -->
 			<tr>
-			   <td data-bind="text: timeDisplay"/>
-			   <td data-bind="text: amountDisplay"/>
-			   <td data-bind="text: note"/>
-			</tr>
+			    <td data-bind="text: timeDisplay"/>
+			       <td data-bind="text: amountDisplay"/>
+			       <td data-bind="text: note"/>
+			       <td>
+				    <span class="glyphicon glyphicon-trash" style="color: #d9534f; cursor: pointer;" data-bind="click: clearTransactionsThrough, event: { mouseover: mouseOver, mouseout: mouseOut}"/>
+			       </td>
+			    </tr>
+			<!-- /ko -->
 			<!-- /ko -->
 		    </tbody>
 		</table>

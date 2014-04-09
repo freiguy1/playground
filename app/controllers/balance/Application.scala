@@ -23,4 +23,10 @@ object Application extends Controller with securesocial.core.SecureSocial {
     val userInfo = request.user.asInstanceOf[models.MyIdentity].userInfo
     Ok(Json.toJson(models.balance.Balance.getByUserId(userInfo.userId)))
   }
+
+  def clearTransactionsThrough(transactionId: Int) = SecuredAction(ajaxCall = true) { implicit request =>
+    val userInfo = request.user.asInstanceOf[models.MyIdentity].userInfo
+    models.balance.Balance.clearTransactionsThrough(transactionId, userInfo.userId)
+    Ok("")
+  }
 }

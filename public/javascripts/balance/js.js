@@ -60,7 +60,7 @@ function fillFromResponse(response){
     viewModel.balanceAmount(response.amount)
     viewModel.transactions.removeAll()
     $.each(response.transactions.reverse(), function(index, value){
-	viewModel.transactions.push(new Transaction(value.id, value.amount, value.time, value.note))
+	viewModel.transactions.push(new Transaction(value.transactionid, value.amount, value.time, value.note))
     })
 
     fillLineGraph()
@@ -142,6 +142,24 @@ function Transaction(id, amount, time, note) {
     me.amountDisplay = ko.computed(function (){
 	return getDollarString(me.amount())	
     })
+    me.isInDeleteMode = ko.observable(false)
+    me.clearTransactionsThrough = function(){
+	ajax.clearTransactionsThrough(me.id).done(function(){
+	    ajax.info().done(function(result){ fillFromResponse(result) }) 
+	}).fail(function() { location.reload() })
+    }
+    me.mouseOver = function(){
+	$.each(viewModel.transactions(), function(index, value){
+	    if(value.id <= me.id){
+		value.isInDeleteMode(true)
+	    }
+	})
+    }
+    me.mouseOut = function(){
+	$.each(viewModel.transactions(), function(index, value){
+	   value.isInDeleteMode(false)
+	})
+    }
 }
 
 function getDollarString(amount){
@@ -176,6 +194,12 @@ var ajax = {
 	return $.ajax({
 	    type: "POST",
 	    url: "/balance?amount=" + amount + noteQueryVar
+	})
+    },
+    clearTransactionsThrough : function(transactionId) {
+	return $.ajax({
+	    type: "PUT",
+	    url: "/balance/clearTransactionsThrough/" + transactionId
 	})
     }
 }
