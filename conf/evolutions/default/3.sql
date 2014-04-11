@@ -3,6 +3,7 @@
 CREATE TABLE team (
     teamId INT AUTO_INCREMENT,
     name VARCHAR(128) NOT NULL,
+    captainName VARCHAR(64) NOT NULL,
     PRIMARY KEY(teamId)
 );
 

@@ -12,7 +12,8 @@ import Database.dynamicSession
 
 case class Team(
   teamId: Option[Int],
-  name: String
+  name: String,
+  captainName: String
 )
 
 case class Competition(
@@ -22,8 +23,8 @@ case class Competition(
 )
 
 case class TeamCompetitionResult(
-  teamId: Option[Int],
-  competitionId: Option[Int],
+  teamId: Int,
+  competitionId: Int,
   pointsEarned: Int,
   notes: Option[String]
 )
@@ -36,17 +37,48 @@ object Accessor {
 
   //TEAMS
   def addTeam(newTeam: Team): Int = defaultDb.withDynSession {
-    teamTable returning teamTable.map(_.teamId) += db.Team(None, newTeam.name)
+    teamTable returning teamTable.map(_.teamId) += db.Team(None, newTeam.name, newTeam.captainName)
   }
   
   def deleteTeam(teamId: Int): Unit = defaultDb.withDynSession {
     teamTable.filter(_.teamId === teamId).delete
   }
   
+  def updateTeam(updatedTeam: Team): Unit = defaultDb.withDynSession {
+    require(updatedTeam.teamId.isDefined)
+    teamTable.filter(_.teamId === updatedTeam.teamId).update(db.Team(updatedTeam.teamId, updatedTeam.name, updatedTeam.captainName))
+  }
+
+  def getTeam(teamId: Int): Option[Team] = defaultDb.withDynSession {
+    teamTable.filter(_.teamId === teamId).firstOption.map(row => Team(row.teamId, row.name, row.captainName))
+  }
 
   //COMPETITIONS
+  def addCompetition(newCompetition: Competition): Int = defaultDb.withDynSession {
+    competitionTable returning competitionTable.map(_.competitionId) += 
+      db.Competition(None, newCompetition.name, newCompetition.instructions)
+  }
+
+  def updateCompetition(updatedCompetition: Competition): Unit = defaultDb.withDynSession {
+    require(updatedCompetition.competitionId.isDefined)
+    competitionTable.filter(_.competitionId === updatedCompetition.competitionId)
+      .update(db.Competition(updatedCompetition.competitionId, updatedCompetition.name, updatedCompetition.instructions))
+  }
+
+  def getCompetition(competitionId: Int): Option[Competition] = defaultDb.withDynSession {
+    competitionTable.filter(_.competitionId === competitionId).firstOption
+      .map(row => Competition(row.competitionId, row.name, row.instructions))
+  }
+
+  def deleteCompetition(competitionId: Int): Unit = defaultDb.withDynSession {
+    competitionTable.filter(_.competitionId === competitionId).delete
+  }
 
   //TEAM COMPETITION RESULT
+  def addResult(result: TeamCompetitionResult) = defaultDb.withDynSession {
+    teamCompetitionResultTable +=
+      db.TeamCompetitionResult(result.teamId, result.competitionId, result.pointsEarned, result.notes)
+  }
 
   /*def get = cloneDb.withDynSession {
     val query = for(dbBelt <- beltTable) yield dbBelt
