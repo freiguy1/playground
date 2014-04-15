@@ -9,10 +9,20 @@ GET     /                           controllers.Application.index
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 #####################################
-#           MCISCUP                 #
+#             MCISCUP               #
 #####################################
-POST	/mcisCup/teams		    controllers.mcisCup.Application.addteam
+POST	/mcisCup/teams		    controllers.mcisCup.Application.addTeam
 DELETE	/mcisCup/teams/:teamId	    controllers.mcisCup.Application.deleteTeam(teamId: Int)
+PUT	/mcisCup/teams/:teamId	    controllers.mcisCup.Application.updateTeam(teamId: Int)
+
+POST	/mcisCup/competitions			controllers.mcisCup.Application.addCompetition
+DELETE	/mcisCup/competitions/:competitionId	controllers.mcisCup.Application.deleteCompetition(competitionId: Int)
+PUT	/mcisCup/competitions/:competitionId	controllers.mcisCup.Application.updateCompetition(competitionId: Int)
+
+PUT	/mcisCup/competitions/:competitionId/teams/:teamId  controllers.mcisCup.Application.addOrUpdateResult(competitionId: Int, teamId: Int)
+
+GET	/mcisCup/info		    controllers.mcisCup.Application.info
+
 
 #####################################
 #           BALANCE                 #

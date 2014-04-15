@@ -35,7 +35,10 @@ object Accessor {
   lazy private val competitionTable = TableQuery[db.CompetitionTable]
   lazy private val teamCompetitionResultTable = TableQuery[db.TeamCompetitionResultTable]
 
+  //---------------------------------
   //TEAMS
+  //---------------------------------
+
   def addTeam(newTeam: Team): Int = defaultDb.withDynSession {
     teamTable returning teamTable.map(_.teamId) += db.Team(None, newTeam.name, newTeam.captainName)
   }
@@ -53,7 +56,14 @@ object Accessor {
     teamTable.filter(_.teamId === teamId).firstOption.map(row => Team(row.teamId, row.name, row.captainName))
   }
 
+  def getTeams: Seq[Team] = defaultDb.withDynSession {
+    teamTable.list.map(row => Team(row.teamId, row.name, row.captainName))
+  }
+
+  //---------------------------------
   //COMPETITIONS
+  //---------------------------------
+  
   def addCompetition(newCompetition: Competition): Int = defaultDb.withDynSession {
     competitionTable returning competitionTable.map(_.competitionId) += 
       db.Competition(None, newCompetition.name, newCompetition.instructions)
@@ -70,37 +80,35 @@ object Accessor {
       .map(row => Competition(row.competitionId, row.name, row.instructions))
   }
 
+  def getCompetitions: Seq[Competition] = defaultDb.withDynSession {
+    competitionTable.list.map(row => Competition(row.competitionId, row.name, row.instructions))
+  }
+
   def deleteCompetition(competitionId: Int): Unit = defaultDb.withDynSession {
     competitionTable.filter(_.competitionId === competitionId).delete
   }
 
-  //TEAM COMPETITION RESULT
-  def addResult(result: TeamCompetitionResult) = defaultDb.withDynSession {
+  //---------------------------------
+  //    TEAM COMPETITION RESULT
+  //---------------------------------
+
+  def getResult(teamId: Int, competitionId: Int): Option[TeamCompetitionResult] = defaultDb.withDynSession {
+    teamCompetitionResultTable.filter(row => row.teamId === teamId && row.competitionId === competitionId).firstOption
+      .map(row => TeamCompetitionResult(row.teamId, row.competitionId, row.pointsEarned, row.notes))
+  }
+  
+  def getResults: Seq[TeamCompetitionResult] = defaultDb.withDynSession {
+    teamCompetitionResultTable.list.map(row => TeamCompetitionResult(row.teamId, row.competitionId, row.pointsEarned, row.notes))
+  }
+
+  def addResult(result: TeamCompetitionResult): Unit = defaultDb.withDynSession {
     teamCompetitionResultTable +=
       db.TeamCompetitionResult(result.teamId, result.competitionId, result.pointsEarned, result.notes)
   }
 
-  /*def get = cloneDb.withDynSession {
-    val query = for(dbBelt <- beltTable) yield dbBelt
-    query.list.map(b => Belt(b.beltId, b.systemId, b.planetNum, b.beltNum, b.hasRats, b.lastChecked, b.lastStatusChanged))
+  def updateResult(result: TeamCompetitionResult): Unit = defaultDb.withDynSession {
+    teamCompetitionResultTable.filter(row => row.teamId === result.teamId && row.competitionId === result.competitionId)
+      .update(db.TeamCompetitionResult(result.teamId, result.competitionId, result.pointsEarned, result.notes))
   }
-
-  def get(id: Long) = cloneDb.withDynSession {
-    val query = for(dbBelt <- beltTable if dbBelt.beltId === id) yield dbBelt
-    query.firstOption.map(b => Belt(b.beltId, b.systemId, b.planetNum, b.beltNum, b.hasRats, b.lastChecked, b.lastStatusChanged))
-  }
-
-  def update(updatedBelt: Belt): Unit = cloneDb.withDynSession {
-    require(updatedBelt.beltId.isDefined)
-    val query = for(dbBelt <- beltTable if dbBelt.beltId === updatedBelt.beltId) yield dbBelt 
-    query.update(db.Belt(updatedBelt.beltId, 
-                         updatedBelt.systemId, 
-                         updatedBelt.planetNum, 
-                         updatedBelt.beltNum, 
-                         updatedBelt.hasRats, 
-                         updatedBelt.lastChecked.map(d => new java.sql.Timestamp(d.getTime())), 
-                         updatedBelt.lastStatusChanged.map(d => new java.sql.Timestamp(d.getTime()))
-    ))
-  }*/
 
 }
