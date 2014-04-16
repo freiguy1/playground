@@ -9,6 +9,14 @@ import play.api.libs.json._
 
 object Application extends Controller with securesocial.core.SecureSocial {
 
+  def index = Action { implicit request =>
+    Ok(views.html.mcisCup.index())
+  }
+
+  def admin = Action { implicit request =>
+    Ok(views.html.mcisCup.admin())
+  }
+
   def addTeam = Action(parse.json) { implicit request =>
     request.body.validate[Team].map{ newTeam =>
       val newTeamId = Accessor.addTeam(newTeam)

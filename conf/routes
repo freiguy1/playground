@@ -11,6 +11,9 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 #####################################
 #             MCISCUP               #
 #####################################
+GET	/mcisCup		    controllers.mcisCup.Application.index
+GET	/mcisCup/admin		    controllers.mcisCup.Application.admin
+
 POST	/mcisCup/teams		    controllers.mcisCup.Application.addTeam
 DELETE	/mcisCup/teams/:teamId	    controllers.mcisCup.Application.deleteTeam(teamId: Int)
 PUT	/mcisCup/teams/:teamId	    controllers.mcisCup.Application.updateTeam(teamId: Int)
