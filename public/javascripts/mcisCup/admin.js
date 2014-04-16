@@ -5,17 +5,27 @@ $(function () {
    $('#addCompetitionNameInput, #addCompetitionInstructionsInput').keypress(function (event) {
         if (event.which == 13)
             viewModel.handleCreateCompetition()
-    })
+   })
 
    $('#addTeamNameInput, #addTeamCaptainNameInput').keypress(function (event) {
         if (event.which == 13)
             viewModel.handleCreateTeam()
-    })
+   })
 
+   $('#editCompetitionNameInput, #editCompetitionInstructionsInput').keypress(function (event) {
+        if (event.which == 13)
+            viewModel.handleEditCompetition()
+   })
+
+   $('#editTeamNameInput, #editTeamCaptainNameInput').keypress(function (event) {
+        if (event.which == 13)
+            viewModel.handleEditTeam()
+   })
+   
    $('#editResultPointsEarnedInput, #editResultNotesInput').keypress(function (event) {
         if (event.which == 13)
             viewModel.handleEditResult()
-    })
+   })
     
 
 
@@ -46,8 +56,18 @@ var viewModel = {
     addTeamName: ko.observable(""),
     addTeamCaptainName: ko.observable(""),
 
+    editTeam: ko.observable({
+	name: ko.observable(""),
+	captainName: ko.observable("")
+    }),
+    
     addCompetitionName: ko.observable(""),
     addCompetitionInstructions: ko.observable(""),
+
+    editCompetition: ko.observable({
+	name: ko.observable(""),
+	instructions: ko.observable("")
+    }),
     
     editResultTeam: ko.observable(),
     editResultCompetition: ko.observable(),
@@ -68,6 +88,18 @@ viewModel.handleCreateTeam = function(){
     })
 }
 
+viewModel.editTeamClicked = function(team){
+    viewModel.editTeam(team)
+    $('#editTeamModal').modal('show')
+}
+
+viewModel.handleEditTeam = function(){
+    ajax.editTeam(viewModel.editTeam().teamId, { name: viewModel.editTeam().name(), captainName: viewModel.editTeam().captainName() }).done(function(){
+	$('#editTeamModal').modal('hide')
+	refreshData()
+    })
+}
+
 viewModel.deleteTeam = function(team){
     ajax.deleteTeam(team.teamId).done(function(){
 	refreshData()
@@ -83,6 +115,20 @@ viewModel.createCompetitionClicked = function(){
 viewModel.handleCreateCompetition = function(){
     ajax.addCompetition({ name: viewModel.addCompetitionName(), instructions: viewModel.addCompetitionInstructions() }).done(function(){
 	$('#addCompetitionModal').modal('hide')    
+	refreshData()
+    })	
+}
+
+viewModel.editCompetitionClicked = function(competition){
+    viewModel.editCompetition(competition)
+    $('#editCompetitionModal').modal('show')    
+}
+
+viewModel.handleEditCompetition = function(){
+    ajax.editCompetition(viewModel.editCompetition().competitionId(), 
+	{ name: viewModel.editCompetition().name(), instructions: viewModel.editCompetition().instructions() })
+    .done(function(){
+	$('#editCompetitionModal').modal('hide')    
 	refreshData()
     })	
 }
@@ -172,6 +218,14 @@ var ajax = {
 	    contentType: "application/json"
 	})
     },
+    editTeam: function(teamId, team) {
+	return $.ajax({
+	    type: "PUT",
+	    url: "/mcisCup/teams/" + teamId,
+	    data: JSON.stringify(team),
+	    contentType: "application/json"
+	})
+    },
     deleteTeam: function(teamId) {
 	return $.ajax({
 	    type: "DELETE",
@@ -182,6 +236,14 @@ var ajax = {
 	return $.ajax({
 	    type: "POST",
 	    url: "/mcisCup/competitions",
+	    data: JSON.stringify(competition),
+	    contentType: "application/json"
+	})
+    },
+    editCompetition: function(competitionId, competition) {
+	return $.ajax({
+	    type: "PUT",
+	    url: "/mcisCup/competitions/" + competitionId,
 	    data: JSON.stringify(competition),
 	    contentType: "application/json"
 	})

@@ -44,6 +44,7 @@ object Accessor {
   }
   
   def deleteTeam(teamId: Int): Unit = defaultDb.withDynSession {
+    teamCompetitionResultTable.filter(_.teamId === teamId).delete
     teamTable.filter(_.teamId === teamId).delete
   }
   
@@ -85,6 +86,7 @@ object Accessor {
   }
 
   def deleteCompetition(competitionId: Int): Unit = defaultDb.withDynSession {
+    teamCompetitionResultTable.filter(_.competitionId === competitionId).delete
     competitionTable.filter(_.competitionId === competitionId).delete
   }
 

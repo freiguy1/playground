@@ -13,7 +13,7 @@
 	    <tr>
 		<th></th>
 		<!-- ko foreach: competitions -->
-		<th><span data-bind="text: name"></span><span class="glyphicon glyphicon-trash" style="margin-left: 8px; color: #d9534f" data-bind="click: $root.deleteCompetition"></span></th>
+		<th><span data-bind="text: name, click: $root.editCompetitionClicked"></span><span class="glyphicon glyphicon-trash" style="margin-left: 8px; color: #d9534f" data-bind="click: $root.deleteCompetition"></span></th>
 		<!-- /ko -->
 		<th data-bind="text: 'Total'"></th>
 	    </tr>
@@ -21,7 +21,7 @@
 	<tbody>
 	    <!-- ko foreach: teams-->
 	    <tr>
-		<th><span data-bind="text: name"></span><span class="glyphicon glyphicon-trash" style="margin-left: 8px; color: #d9534f" data-bind="click: $root.deleteTeam"></span></th>
+		<th><span data-bind="text: name, click: $root.editTeamClicked"></span><span class="glyphicon glyphicon-trash" style="margin-left: 8px; color: #d9534f" data-bind="click: $root.deleteTeam"></span></th>
 		<!-- ko foreach: results -->
 		<!-- ko if: hasValue -->
 		<td data-bind="text: result.pointsEarned, click: function(){ $root.editResultClicked(result.teamId(), result.competitionId())}"></td>
@@ -60,6 +60,28 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<div class="modal fade" id="editTeamModal">
+    <div class="modal-dialog">
+	<div class="modal-content">
+	    <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">Edit Team</h4>
+	    </div>
+	    <div class="modal-body">
+		    <div class="form-group">
+			<input id="editTeamNameInput" type="text" class="form-control" placeholder="Team Name" data-bind="value: editTeam().name, valueUpdate: 'keypress'">
+		    </div>
+		    <div class="form-group">
+			<input id="editTeamCaptainNameInput" type="text" class="form-control" placeholder="Captain Name" data-bind="value: editTeam().captainName, valueUpdate: 'keypress'">
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		<button type="button" class="btn btn-primary" data-bind="click: handleEditTeam">Save</button>
+	    </div>
+	</div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <div class="modal fade" id="addCompetitionModal">
     <div class="modal-dialog">
@@ -83,6 +105,30 @@
 	</div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<div class="modal fade" id="editCompetitionModal">
+    <div class="modal-dialog">
+	<div class="modal-content">
+	    <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">Edit Competition</h4>
+	    </div>
+	    <div class="modal-body">
+		    <div class="form-group">
+			<input id="editCompetitionNameInput" type="text" class="form-control" placeholder="Competition Name" data-bind="value: editCompetition().name, valueUpdate: 'keypress'">
+		    </div>
+		    <div class="form-group">
+			<textArea id="editCompetitionInstructionsInput" type="text" class="form-control" placeholder="Instructions" data-bind="value: editCompetition().instructions, valueUpdate: 'keypress'"></textArea>
+		    </div>
+	    </div>
+	    <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+		<button type="button" class="btn btn-primary" data-bind="click: handleEditCompetition">Save</button>
+	    </div>
+	</div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <div class="modal fade" id="editResultModal">
     <div class="modal-dialog">
