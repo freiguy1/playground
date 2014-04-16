@@ -68,6 +68,12 @@ viewModel.handleCreateTeam = function(){
     })
 }
 
+viewModel.deleteTeam = function(team){
+    ajax.deleteTeam(team.teamId).done(function(){
+	refreshData()
+    })
+}
+
 viewModel.createCompetitionClicked = function(){
     viewModel.addCompetitionName("")
     viewModel.addCompetitionInstructions("")
@@ -164,6 +170,12 @@ var ajax = {
 	    url: "/mcisCup/teams",
 	    data: JSON.stringify(team),
 	    contentType: "application/json"
+	})
+    },
+    deleteTeam: function(teamId) {
+	return $.ajax({
+	    type: "DELETE",
+	    url: "/mcisCup/teams/" + teamId
 	})
     },
     addCompetition: function(competition) {
