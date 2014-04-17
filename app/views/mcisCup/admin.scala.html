@@ -8,7 +8,7 @@
 </div>
 
 <div>
-    <table class="table">
+    <table class="table table-hover">
 	<thead>
 	    <tr>
 		<th></th>
@@ -27,7 +27,7 @@
 		<td data-bind="text: result.pointsEarned, click: function(){ $root.editResultClicked(result.teamId(), result.competitionId())}"></td>
 		<!-- /ko -->
 		<!-- ko ifnot: hasValue -->
-		<td data-bind="text: 'none', click: function(){ $root.editResultClicked(result.teamId(), result.competitionId())}"></td>
+		<td data-bind="text: '-', click: function(){ $root.editResultClicked(result.teamId(), result.competitionId())}"></td>
 		<!-- /ko -->
 		<!-- /ko -->
 		<td data-bind="text: totalPoints"></td>
