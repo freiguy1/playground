@@ -17,6 +17,9 @@ function refreshData(){
 	$.each(data.teams, function(index, team){
 	   viewModel.teams.push(new Team(team.teamId, team.name, team.captainName))
 	})
+	viewModel.teams.sort(function(left, right){
+	    return left.totalPoints() == right.totalPoints() ? 0 : (left.totalPoints() > right.totalPoints() ? -1 : 1)
+	})
     })
 }
 
