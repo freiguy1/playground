@@ -2,37 +2,71 @@
 
 @main {
 <script src="@routes.Assets.at("javascripts/mcisCup/js.js")" type="text/javascript"></script>
-    
-<div>
-    <table class="table table-hover">
-	<thead>
-	    <tr>
-		<th></th>
-		<!-- ko foreach: competitions -->
-		<th data-bind="text: name"></th>
-		<!-- /ko -->
-		<th data-bind="text: 'Total'"></th>
-	    </tr>
-	</thead>
-	<tbody>
-	    <!-- ko foreach: teams-->
-	    <tr>
-		<td data-bind="text: name"></td>
-		<!-- ko foreach: results -->
-		<!-- ko if: hasValue -->
-		<td data-bind="text: result.pointsEarned"></td>
-		<!-- /ko -->
-		<!-- ko ifnot: hasValue -->
-		<td data-bind="text: '-'"></td>
-		<!-- /ko -->
-		<!-- /ko -->
-		<td data-bind="text: totalPoints"></td>
-	    </tr>
-	    <!-- /ko -->
-	</tbody>
-    </table>
+
+<div class="mcis-brand-bar">
+    <div class="cup-logo pull-left">
+        <span class="font-icon winner"></span>
+        MCIS Cup
+        <div style="display: none;">
+            Icon made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com/free-icon/winner-student-with-competition-trophy-jumping-of-happiness_43572" title="Flaticon">www.flaticon.com</a>
+        </div>
+    </div>
 </div>
-	
+<div class="promo-viewer">
+    <div class="container">
+        <div class="col-md-6">
+            <div class="promo-text">
+                <div class="promo-text-small">The Competition for May is...</div>
+                <div class="promo-text-large">Something Fun!</div>
+                <a href="javascript:;">Details</a>
+            </div>
+        </div>
+        <div class="col-md-6"></div>
+    </div>
+</div>
+<div class="main-content">
+    <div class="container">
+        <!--<ul class="nav nav-tabs" style="margin-bottom: 15px;">-->
+            <!--<li class="active"><a href="#standings" data-toggle="tab">Standings</a></li>-->
+            <!--<li><a href="#updates" data-toggle="tab">Updates</a></li>-->
+        <!--</ul>-->
+        <!--<div id="home-tab-content" class="tab-content">-->
+            <!--<div class="tab-pane fade active in" id="standings">-->
+        <h3>Standings</h3>
+        <table class="table table-hover">
+        <thead>
+            <tr>
+            <th></th>
+            <!-- ko foreach: competitions -->
+            <th data-bind="text: name"></th>
+            <!-- /ko -->
+            <th data-bind="text: 'Total'"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- ko foreach: teams-->
+            <tr>
+            <td data-bind="text: name"></td>
+            <!-- ko foreach: results -->
+            <!-- ko if: hasValue -->
+            <td data-bind="text: result.pointsEarned"></td>
+            <!-- /ko -->
+            <!-- ko ifnot: hasValue -->
+            <td data-bind="text: '-'"></td>
+            <!-- /ko -->
+            <!-- /ko -->
+            <td data-bind="text: totalPoints"></td>
+            </tr>
+            <!-- /ko -->
+        </tbody>
+        </table>
+            <!--</div>-->
+            <!--<div class="tab-pane fade in" id="updates">Post videos, pics, announcements, etc here</div>-->
+        <!--</div>-->
+    </div>
+</div>
+
+
 
 
 }
