@@ -24,7 +24,7 @@
 		<th><span data-bind="text: name, click: $root.editTeamClicked"></span><span class="glyphicon glyphicon-trash" style="margin-left: 8px; color: #d9534f" data-bind="click: $root.deleteTeam"></span></th>
 		<!-- ko foreach: results -->
 		<!-- ko if: hasValue -->
-		<td data-bind="text: result.pointsEarned, click: function(){ $root.editResultClicked(result.teamId(), result.competitionId())}"></td>
+		<td><span class="score-popover" data-bind="text: result.pointsEarned, attr: { 'data-content': result.notes }, click: function() { $root.editResultClicked(result.teamId(), result.competitionId())}" data-toggle="popover" data-placement="top" data-trigger="hover" data-container="body"></span></td>
 		<!-- /ko -->
 		<!-- ko ifnot: hasValue -->
 		<td data-bind="text: '-', click: function(){ $root.editResultClicked(result.teamId(), result.competitionId())}"></td>

@@ -11,22 +11,20 @@
 		<!-- ko foreach: competitions -->
 		<th data-bind="text: name"></th>
 		<!-- /ko -->
-		<th data-bind="text: 'Total'"></th>
 	    </tr>
 	</thead>
 	<tbody>
 	    <!-- ko foreach: teams-->
 	    <tr>
-		<td data-bind="text: name"></td>
+		<td><span data-bind="text: name"></span> (<span data-bind="text: totalPoints"></span> points)</td>
 		<!-- ko foreach: results -->
 		<!-- ko if: hasValue -->
-		<td data-bind="text: result.pointsEarned"></td>
+		<td><span class="score-popover" data-bind="text: result.pointsEarned, attr: { 'data-content': result.notes }" data-toggle="popover" data-placement="top" data-trigger="hover" data-container="body"></span></td>
 		<!-- /ko -->
 		<!-- ko ifnot: hasValue -->
 		<td data-bind="text: '-'"></td>
 		<!-- /ko -->
 		<!-- /ko -->
-		<td data-bind="text: totalPoints"></td>
 	    </tr>
 	    <!-- /ko -->
 	</tbody>
