@@ -75,6 +75,52 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     margin-bottom: 50px;
 }
 
+.points-leader {
+    background: #ffffff;
+    border-radius: 5px;
+    float: right;
+    width: 320px;
+}
+
+    .points-leader .title {
+        background: #ff6600;
+        border-radius: 5px 5px 0 0;
+        color: #ffffff;
+        font-family: "Varela Round", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 20px;
+        padding: 10px 20px;
+        text-transform: uppercase;
+    }
+
+    .points-leader .team-info {
+        padding: 10px 20px;
+    }
+
+    .points-leader .team-name {
+        font-size: 21px;
+        font-weight: 600;
+        line-height: 1;
+    }
+
+    .points-leader .team-captain {
+        font-size: 14px;
+        font-weight: 300;
+    }
+
+    .points-leader .points {
+        font-size: 60px;
+        font-weight: 600;
+        line-height: .8;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .points-leader .points-label {
+        font-size: 16px;
+        font-weight: 300;
+        text-align: center;
+    }
+
 .cup-logo {
     color: #2A2A2A;
     font-family: "Audiowide", "Helvetica Neue", Helvetica, Arial, sans-serif;
