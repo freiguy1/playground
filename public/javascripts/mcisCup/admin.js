@@ -45,6 +45,7 @@ function refreshData(){
 	$.each(data.teams, function(index, team){
 	   viewModel.teams.push(new Team(team.teamId, team.name, team.captainName))
 	})
+	$('.score-popover').popover()
     })
 }
 

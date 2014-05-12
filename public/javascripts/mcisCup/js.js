@@ -20,7 +20,8 @@ function refreshData(){
         viewModel.teams.sort(function(left, right){
             return left.totalPoints() == right.totalPoints() ? 0 : (left.totalPoints() > right.totalPoints() ? -1 : 1)
         })
-        viewModel.leader(viewModel.teams()[0])
+        viewModel.leader(viewModel.teams()[0]);
+        $('.score-popover').popover();
     })
 }
 
