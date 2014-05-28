@@ -24,12 +24,19 @@
         <div class="col-md-6">
             <div class="points-leader">
                 <div class="title">Current Leader</div>
+		<!-- ko if: isTieForLeader -->
+                <div class="team-info">
+                    <div class="points">Tie!</div>
+                </div>
+		<!-- /ko -->
+		<!-- ko ifnot: isTieForLeader -->
                 <div class="team-info" data-bind="with: leader">
                     <div class="team-name" data-bind="text: name()"></div>
                     <div class="team-captain" data-bind="text: captainName()"></div>
                     <div class="points" data-bind="text: totalPoints()"></div>
                     <div class="points-label">points</div>
                 </div>
+		<!-- /ko -->
             </div>
         </div>
     </div>
