@@ -8,5 +8,6 @@ package object JsonConverters{
   implicit val teamFormat = Json.format[Team]
   implicit val competitionFormat = Json.format[Competition]
   implicit val teamCompetitionResultFormat = Json.format[TeamCompetitionResult]
+  implicit val nextCompetitionInfoFormat = Json.format[NextCompetitionInfo]
 
 }

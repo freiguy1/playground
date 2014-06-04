@@ -13,6 +13,7 @@ function refreshData(){
     ajax.info().done(function(data){
         ko.mapping.fromJS(data.competitions, {}, viewModel.competitions)
         ko.mapping.fromJS(data.results, {}, viewModel.results)
+	viewModel.nextCompetitionInfo(ko.mapping.fromJS(data.nextCompetitionInfo))
         viewModel.teams.removeAll()
         $.each(data.teams, function(index, team){
            viewModel.teams.push(new Team(team.teamId, team.name, team.captainName))
@@ -29,7 +30,8 @@ var viewModel = {
     teams: ko.observableArray([]),
     competitions: ko.observableArray([]),
     results: ko.observableArray([]),
-    leader: ko.observable()
+    leader: ko.observable(),
+    nextCompetitionInfo: ko.observable()
 }
 
 viewModel.isTieForLeader = ko.computed(function(){

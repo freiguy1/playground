@@ -24,6 +24,8 @@ PUT	/mcisCup/competitions/:competitionId	controllers.mcisCup.Application.updateC
 
 PUT	/mcisCup/competitions/:competitionId/teams/:teamId  controllers.mcisCup.Application.addOrUpdateResult(competitionId: Int, teamId: Int)
 
+PUT	/mcisCup/nextCompetitionInfo		controllers.mcisCup.Application.addNextCompetitionInfo
+
 GET	/mcisCup/info		    controllers.mcisCup.Application.info
 
 

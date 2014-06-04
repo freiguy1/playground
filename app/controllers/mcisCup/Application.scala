@@ -62,7 +62,14 @@ object Application extends Controller with securesocial.core.SecureSocial {
       Accessor.getResult(teamId, competitionId)
         .map(_ => Accessor.updateResult(TeamCompetitionResult(teamId, competitionId, result.pointsEarned, result.notes)))
         .getOrElse(Accessor.addResult(TeamCompetitionResult(teamId, competitionId, result.pointsEarned, result.notes)))
-      Ok("")
+      NoContent
+    }.recoverTotal(e => BadRequest("Detected Error: " + JsError.toFlatJson(e)))
+  }
+
+  def addNextCompetitionInfo = Action(parse.json) { implicit request =>
+    request.body.validate[NextCompetitionInfo].map { nextCompetitionInfo =>
+      Accessor.addNextCompetitionInfo(nextCompetitionInfo)
+      NoContent
     }.recoverTotal(e => BadRequest("Detected Error: " + JsError.toFlatJson(e)))
   }
 
@@ -70,20 +77,13 @@ object Application extends Controller with securesocial.core.SecureSocial {
     val teams = Accessor.getTeams
     val competitions = Accessor.getCompetitions
     val results = Accessor.getResults
-    /*val tuples = for(competition <- competitions; team <- teams){
-      val result = results.find(r => r.teamId == team.teamId.get && r.competitionId == competition.competitionId.get)
-      yield(competition.competitionId, team.teamId, result)
-    }
-
-    val data = competitions
-      .map(c => c.competitionId.get -> teams
-        .map(t => t.teamId.get -> results
-          .find(r => r.teamId == t.teamId.get && r.competitionId == c.competitionId.get))
-        .toMap)
-      .toMap
-    */
-
-    Ok(Json.toJson(Map("teams" -> Json.toJson(teams), "competitions" -> Json.toJson(competitions), "results" -> Json.toJson(results))))
+    val nextCompetitionInfo = Accessor.getNextCompetitionInfo
+    Ok(Json.toJson(Map(
+      "teams" -> Json.toJson(teams), 
+      "competitions" -> Json.toJson(competitions), 
+      "results" -> Json.toJson(results),
+      "nextCompetitionInfo" -> Json.toJson(nextCompetitionInfo)
+    )))
   }
 
 }

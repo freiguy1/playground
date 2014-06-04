@@ -29,11 +29,18 @@ case class TeamCompetitionResult(
   notes: Option[String]
 )
 
+case class NextCompetitionInfo(
+  name: String,
+  details: Option[String],
+  month: String
+)
+
 object Accessor {
   lazy private val defaultDb = Database.forDataSource(DB.getDataSource("default"))
   lazy private val teamTable = TableQuery[db.TeamTable]
   lazy private val competitionTable = TableQuery[db.CompetitionTable]
   lazy private val teamCompetitionResultTable = TableQuery[db.TeamCompetitionResultTable]
+  lazy private val nextCompetitionInfoTable = TableQuery[db.NextCompetitionInfoTable]
 
   //---------------------------------
   //TEAMS
@@ -111,6 +118,20 @@ object Accessor {
   def updateResult(result: TeamCompetitionResult): Unit = defaultDb.withDynSession {
     teamCompetitionResultTable.filter(row => row.teamId === result.teamId && row.competitionId === result.competitionId)
       .update(db.TeamCompetitionResult(result.teamId, result.competitionId, result.pointsEarned, result.notes))
+  }
+
+
+  //---------------------------------
+  //     NEXT COMPETITION INFO 
+  //---------------------------------
+  
+  def addNextCompetitionInfo(info: NextCompetitionInfo) = defaultDb.withDynSession {
+    nextCompetitionInfoTable += db.NextCompetitionInfo(None, info.name, info.details, info.month)
+  } 
+
+  def getNextCompetitionInfo = defaultDb.withDynSession {
+    val dbResultOpt = nextCompetitionInfoTable.list.sortBy(0 - _.nextCompetitionInfoId.get).headOption
+    dbResultOpt.map(dbResult => NextCompetitionInfo(dbResult.name, dbResult.details, dbResult.month))
   }
 
 }
