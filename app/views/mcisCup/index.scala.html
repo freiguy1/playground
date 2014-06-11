@@ -15,10 +15,12 @@
 <div class="promo-viewer">
     <div class="container">
         <div class="col-md-6">
-            <div class="promo-text">
-                <div class="promo-text-small">The Competition for <span>June<span> is...</div>
-                <div class="promo-text-large">Baggo</div>
-                <!--<a href="javascript:;">Details</a>-->
+            <div class="promo-text" data-bind="with: nextCompetitionInfo">
+                <div class="promo-text-small">The Competition for <span data-bind="text: month"></span> is...</div>
+                <div class="promo-text-large" data-bind="text: name"></div>
+		<!-- ko if: $data.details !== undefined -->
+                <a data-bind="click: $root.nextCompetitionDetailsClicked">Details</a>
+		<!-- /ko -->
             </div>
         </div>
         <div class="col-md-6">
@@ -81,6 +83,29 @@
         <!--</div>-->
     </div>
 </div>
+
+<div class="modal fade" id="nextCompetitionDetailsModal" data-bind="with: nextCompetitionInfo">
+    <div class="modal-dialog">
+	<div class="modal-content">
+	    <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title"><span data-bind="text: name"></span> Details</h4>
+	    </div>
+	    <div class="modal-body">
+		<!-- ko if: $data.details !== undefined -->
+		<p data-bind="text: details"></p>
+		<!-- /ko -->
+	    </div>
+	    <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	    </div>
+	</div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
 
 
 

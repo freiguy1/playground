@@ -34,6 +34,10 @@ var viewModel = {
     nextCompetitionInfo: ko.observable()
 }
 
+viewModel.nextCompetitionDetailsClicked = function(){
+    $('#nextCompetitionDetailsModal').modal()
+}
+
 viewModel.isTieForLeader = ko.computed(function(){
     return viewModel.teams().length >= 2 && viewModel.teams()[0].totalPoints() === viewModel.teams()[1].totalPoints()
 })
