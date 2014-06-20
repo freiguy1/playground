@@ -6,3 +6,5 @@ If you've got any questions, don't be afraid to ask!
 
 
 You're free to use, make money from, deploy, and modify this code.  
+
+  [1]: http://playground.ethanfrei.com
