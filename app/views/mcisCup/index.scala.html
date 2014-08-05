@@ -16,9 +16,9 @@
     <div class="container">
         <div class="col-md-6">
             <div class="promo-text" data-bind="with: nextCompetitionInfo">
-                <div class="promo-text-small">The Competition for <span data-bind="text: month"></span> is...</div>
+                <div class="promo-text-small">The Competition for <span data-bind="text: $root.month"></span> is...</div>
                 <div class="promo-text-large" data-bind="text: name"></div>
-		<!-- ko if: $data.details !== undefined -->
+		<!-- ko if: $data !== undefined -->
                 <a data-bind="click: $root.nextCompetitionDetailsClicked">Details</a>
 		<!-- /ko -->
             </div>
@@ -28,7 +28,10 @@
                 <div class="title">Current Leader</div>
 		<!-- ko if: isTieForLeader -->
                 <div class="team-info">
-                    <div class="points">Tie!</div>
+                    <div class="team-name" data-bind="text: 'Tie!'"></div>
+                    <div class="team-captain" data-bind="text: tieDisplay()"></div>
+                    <div class="points" data-bind="text: tiePoints()"></div>
+                    <div class="points-label">points</div>
                 </div>
 		<!-- /ko -->
 		<!-- ko ifnot: isTieForLeader -->
@@ -40,6 +43,11 @@
                 </div>
 		<!-- /ko -->
             </div>
+        </div>
+    </div>
+    <div class="points-leader-mobile">
+        <div class="container container-mobile">
+            <div class="title">Current Leader: </div>
         </div>
     </div>
 </div>
@@ -92,7 +100,7 @@
 		<h4 class="modal-title"><span data-bind="text: name"></span> Details</h4>
 	    </div>
 	    <div class="modal-body">
-		<!-- ko if: $data.details !== undefined -->
+		<!-- ko if: $data !== null && $data.details !== undefined -->
 		<p data-bind="text: details"></p>
 		<!-- /ko -->
 	    </div>
