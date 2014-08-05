@@ -14,40 +14,53 @@
 </div>
 <div class="promo-viewer">
     <div class="container">
-        <div class="col-md-6">
-            <div class="promo-text" data-bind="with: nextCompetitionInfo">
-                <div class="promo-text-small">The Competition for <span data-bind="text: $root.month"></span> is...</div>
-                <div class="promo-text-large" data-bind="text: name"></div>
-		<!-- ko if: $data !== undefined -->
-                <a data-bind="click: $root.nextCompetitionDetailsClicked">Details</a>
-		<!-- /ko -->
+        <div class="row">
+            <div class="col-md-6 col-sm-7 col-xs-12">
+                <div class="promo-text" data-bind="with: nextCompetitionInfo">
+                    <div class="promo-text-small">The Competition for <span data-bind="text: $root.month"></span> is...</div>
+                    <div class="promo-text-large" data-bind="text: name"></div>
+            <!-- ko if: $data !== undefined -->
+                    <a data-bind="click: $root.nextCompetitionDetailsClicked">Details</a>
+            <!-- /ko -->
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="points-leader">
-                <div class="title">Current Leader</div>
-		<!-- ko if: isTieForLeader -->
-                <div class="team-info">
-                    <div class="team-name" data-bind="text: 'Tie!'"></div>
-                    <div class="team-captain" data-bind="text: tieDisplay()"></div>
-                    <div class="points" data-bind="text: tiePoints()"></div>
-                    <div class="points-label">points</div>
+            <div class="col-md-6 col-sm-5 hidden-xs">
+                <div class="points-leader">
+                    <div class="title">Current Leader</div>
+            <!-- ko if: isTieForLeader -->
+                    <div class="team-info">
+                        <div class="team-name" data-bind="text: 'Tie!'"></div>
+                        <div class="team-captain" data-bind="text: tieDisplay()"></div>
+                        <div class="points" data-bind="text: tiePoints()"></div>
+                        <div class="points-label">points</div>
+                    </div>
+            <!-- /ko -->
+            <!-- ko ifnot: isTieForLeader -->
+                    <div class="team-info" data-bind="with: leader">
+                        <div class="team-name" data-bind="text: name()"></div>
+                        <div class="team-captain" data-bind="text: captainName()"></div>
+                        <div class="points" data-bind="text: totalPoints()"></div>
+                        <div class="points-label">points</div>
+                    </div>
+            <!-- /ko -->
                 </div>
-		<!-- /ko -->
-		<!-- ko ifnot: isTieForLeader -->
-                <div class="team-info" data-bind="with: leader">
-                    <div class="team-name" data-bind="text: name()"></div>
-                    <div class="team-captain" data-bind="text: captainName()"></div>
-                    <div class="points" data-bind="text: totalPoints()"></div>
-                    <div class="points-label">points</div>
-                </div>
-		<!-- /ko -->
             </div>
         </div>
     </div>
-    <div class="points-leader-mobile">
+    <div class="points-leader-mobile visible-xs">
         <div class="container container-mobile">
-            <div class="title">Current Leader: </div>
+            <div class="title text-light">
+                <span>Current Leader:</span>
+                    <!-- ko if: isTieForLeader -->
+                        <span class="text-bold" data-bind="text: 'Tie!'"></span> <span class="text-normal" data-bind="text: tieDisplay()"></span> with <span class="text-bold" data-bind="text: tiePoints()"></span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: isTieForLeader -->
+                        <!-- ko with: leader -->
+                        <span class="text-bold" data-bind="text: name()"></span> with <span class="text-bold" data-bind="text: totalPoints()"></span>
+                        <!-- /ko -->
+                    <!-- /ko -->
+                <span> points</span>
+            </div>
         </div>
     </div>
 </div>

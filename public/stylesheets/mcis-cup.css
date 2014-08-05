@@ -30,6 +30,18 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: "Varela Round", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+.text-bold {
+    font-weight: bold;
+}
+
+.text-light {
+    font-weight: lighter;
+}
+
+.text-normal {
+    font-weight: normal;
+}
+
 .mcis-brand-bar {
     border-bottom: 1px solid #ff6600;
     height: 50px;
@@ -47,7 +59,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 }
 
 .promo-viewer .container {
-    padding: 60px 0;
+    padding: 60px 15px;
 }
 
 .promo-viewer a {
