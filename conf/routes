@@ -56,6 +56,21 @@ PUT	/clone/api/belts/:id/clear	controllers.clone.api.BeltApi.clear(id: Long)
 GET	/clone/api/time			controllers.clone.api.BaseApi.time
 
 
+#####################################
+#              CHILI                #
+#####################################
+GET  /chili        controllers.chili.Application.index
+
+#    ########################
+#    #         API          #
+#    ########################
+
+GET    /chili/entries         controllers.chili.Application.getEntries
+GET    /chili/entries/:id     controllers.chili.Application.getEntry(id: Int)
+PUT    /chili/entries/:id     controllers.chili.Application.updateEntry(id: Int)
+POST   /chili/entries         controllers.chili.Application.addEntry
+DELETE /chili/entries/:id     controllers.chili.Application.deleteEntry(id: Int)
+
 
 
 #################################
