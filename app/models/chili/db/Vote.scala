@@ -8,7 +8,8 @@ case class Vote(
   voteId: Int,
   entryId: Int,
   voterName: Option[String],
-  comment: Option[String]
+  comment: Option[String],
+  time: java.sql.Timestamp
 )
 
 
@@ -18,8 +19,9 @@ class VoteTable(tag: Tag) extends Table[Vote](tag, "vote") {
   def entryId = column[Int]("entryId", O.NotNull)
   def voterName = column[Option[String]]("voterName")
   def comment = column[Option[String]]("comment")
+  def time = column[java.sql.Timestamp]("time")
 
-  def * = (voteId, entryId, voterName, comment) <> (Vote.tupled, Vote.unapply)
+  def * = (voteId, entryId, voterName, comment, time) <> (Vote.tupled, Vote.unapply)
 
   private lazy val entryTable = TableQuery[EntryTable]
 

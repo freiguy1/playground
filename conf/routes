@@ -59,11 +59,15 @@ GET	/clone/api/time			controllers.clone.api.BaseApi.time
 #####################################
 #              CHILI                #
 #####################################
-GET  /chili        controllers.chili.Application.index
+GET    /chili        controllers.chili.Application.index
+GET    /chili/admin  controllers.chili.Application.admin
 
 #    ########################
 #    #         API          #
 #    ########################
+
+GET    /chili/entries/:id/votes controllers.chili.Application.getVotesByEntry(id: Int)
+POST   /chili/entries/:id/votes controllers.chili.Application.addVote(id: Int)
 
 GET    /chili/entries         controllers.chili.Application.getEntries
 GET    /chili/entries/:id     controllers.chili.Application.getEntry(id: Int)

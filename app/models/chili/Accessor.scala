@@ -13,7 +13,8 @@ import Database.dynamicSession
 case class Vote(
   entryId: Int,
   voterName: Option[String],
-  comment: Option[String]
+  comment: Option[String],
+  time: java.util.Date
 )
 
 case class Entry (
@@ -28,9 +29,31 @@ object Accessor {
   lazy private val database = Database.forDataSource(DB.getDataSource("default"))
   lazy private val entryTable = TableQuery[db.EntryTable]
   lazy private val voteTable = TableQuery[db.VoteTable]
+  
+  /*****************
+   *     VOTES     *
+   *****************/
 
+  def addVote(newVote: Vote): Unit = database.withDynSession {
+    val time = new java.sql.Timestamp(newVote.time.getTime())
+    voteTable += db.Vote(0, newVote.entryId, newVote.voterName, newVote.comment, time)
+  }
+
+  def getVotes(): Seq[Vote] = database.withDynSession {
+    voteTable.list.map(row => Vote(row.entryId, row.voterName, row.comment, row.time))
+  }
+
+  def getVotesByEntry(entryId: Int): Seq[Vote] = database.withDynSession {
+    voteTable.filter(_.entryId === entryId).list
+      .map(row => Vote(row.entryId, row.voterName, row.comment, row.time))
+  }
+
+  /*****************
+   *    ENTRIES    *
+   *****************/
   def addEntry(newEntry: Entry): Int = database.withDynSession {
-    entryTable returning entryTable.map(_.entryId) += db.Entry(0, newEntry.name, newEntry.number, newEntry.chefName, newEntry.description)
+    entryTable returning entryTable.map(_.entryId) += 
+      db.Entry(0, newEntry.name, newEntry.number, newEntry.chefName, newEntry.description)
   }
 
   def getEntries(): Seq[Entry] = database.withDynSession {
