@@ -1,0 +1,153 @@
+
+$(function () {
+    initViewModel()
+    ko.applyBindings(viewModel)
+
+    $('#addEntryModal').on('shown.bs.modal', function () {
+        $('#addEntryNameInput').focus();
+    })
+
+    $('#updateEntryModal').on('shown.bs.modal', function () {
+        $('#updateEntryNameInput').focus();
+    })
+
+    onEnter('#addEntryNameInput, #addEntryNumberInput, #addEntryChefNameInput', function() {
+        viewModel.addEntryModalClicked();
+    });
+    onEnter('#updateEntryNameInput, #updateEntryNumberInput, #updateEntryChefNameInput', function() {
+        viewModel.updateEntryModalClicked();
+    });
+    
+})
+
+function onEnter(query, func) {
+    $(query).keypress(function (event) {
+        if (event.which == 13)
+            func()
+    })
+}
+
+
+initViewModel = function() {
+    refreshData()
+}
+
+refreshData = function() {
+    viewModel.loading(true)
+    publicAjax.getEntries().done(function(data) {
+        $.each(data, function(index, value) {
+            if(!value.description)
+                value.description = null
+        })
+        data.sort(function(left, right) {
+            return left.number - right.number
+        })
+        ko.mapping.fromJS(data, {}, viewModel.entries)
+        viewModel.loading(false)
+    });
+}
+
+var viewModel = {
+    loading: ko.observable(true),
+    entries: ko.observableArray([]),
+    addEntry: ko.observable({
+        name: ko.observable(""),
+        number: ko.observable(""),
+        chefName: ko.observable(""),
+        description: ko.observable(""),
+        displayError: ko.observable(false)
+    }),
+    updateEntry: ko.observable({
+        entryId: ko.observable(),
+        name: ko.observable(""),
+        number: ko.observable(""),
+        chefName: ko.observable(""),
+        description: ko.observable(""),
+        displayError: ko.observable(false)
+    })
+}
+
+viewModel.addEntryClicked = function() {
+    viewModel.addEntry().name("")
+    viewModel.addEntry().number(viewModel.nextEntryNumber())
+    viewModel.addEntry().chefName("")
+    viewModel.addEntry().description("")
+
+    viewModel.addEntry().displayError(false)
+
+    $('#addEntryModal').modal()
+}
+
+viewModel.nextEntryNumber = ko.computed(function() {
+    var highest = 1
+    var numbers = $.map(viewModel.entries(), function(value) {
+        return value.number()
+    })
+    $.each(numbers, function(index, value) {
+        if(value > highest)
+            highest = value
+    })
+    var result = highest + 1
+    for(i = highest; i > 0; i--) {
+        if($.inArray(i, numbers) == -1) 
+            result = i;
+    }
+    return result
+})
+
+viewModel.addEntryModalClicked = function() {
+    viewModel.addEntry().displayError(false)
+    var description = viewModel.addEntry().description()
+    if(!description || description.match(/^ *$/) !== null) {
+        description = null
+    }
+    adminAjax.addEntry({
+        name: viewModel.addEntry().name(),
+        number: parseInt(viewModel.addEntry().number()),
+        chefName: viewModel.addEntry().chefName(),
+        description: description
+    }).done(function() {
+        $('#addEntryModal').modal('hide')
+        refreshData()
+    }).fail(function() {
+        viewModel.addEntry().displayError(true)
+    })
+}
+
+
+viewModel.updateEntryClicked = function(data) {
+    viewModel.updateEntry().entryId(data.entryId())
+    viewModel.updateEntry().name(data.name())
+    viewModel.updateEntry().number(data.number())
+    viewModel.updateEntry().chefName(data.chefName())
+    viewModel.updateEntry().description(data.description())
+
+    viewModel.updateEntry().displayError(false)
+
+    $('#updateEntryModal').modal()
+}
+
+viewModel.updateEntryModalClicked = function() {
+    viewModel.updateEntry().displayError(false)
+    var description = viewModel.updateEntry().description()
+    if(!description || description.match(/^ *$/) !== null) {
+        description = null
+    }
+    adminAjax.updateEntry(viewModel.updateEntry().entryId(), {
+        name: viewModel.updateEntry().name(),
+        number: parseInt(viewModel.updateEntry().number()),
+        chefName: viewModel.updateEntry().chefName(),
+        description: description
+    }).done(function() {
+        $('#updateEntryModal').modal('hide')
+        refreshData()
+    }).fail(function() {
+        viewModel.updateEntry().displayError(true)
+    });
+}
+
+viewModel.deleteEntryClicked = function(data) {
+    adminAjax.deleteEntry(data.entryId()).done(function() {
+        refreshData()
+    })
+}
