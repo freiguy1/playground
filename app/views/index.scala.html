@@ -1,10 +1,30 @@
 @()
 
 @main("Playground style") {
-
-    <a href="@controllers.clone.routes.Application.index"><h2>Clone</h2></a>
-    <a href="@controllers.balance.routes.Application.index"><h2>Balance</h2></a>
-    <a href="@controllers.mcisCup.routes.Application.index"><h2>MCIS Cup</h2></a>
-    <a href="@controllers.chili.routes.Application.index"><h2>Chili</h2></a>
-
+<div class="container">
+    <div class="row">
+        <div class="visible-xs text-center"><h3><a href="@controllers.clone.routes.Application.index">Clone</a></h3></div>
+        <div class="col-sm-2 text-right hidden-xs"><h3><a href="@controllers.clone.routes.Application.index">Clone</a></h3></div>
+        <div class="col-sm-10" style="margin-top: 24px;">An application for chasing down valuable NPC 'clone's in the game EVE Online.</div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="visible-xs text-center"><h3><a href="@controllers.balance.routes.Application.index">Balance</a></h3></div>
+        <h3 class="col-sm-2 text-right hidden-xs"><a href="@controllers.balance.routes.Application.index">Balance</a></h3>
+        <div class="col-sm-10" style="margin-top: 24px;">Keeps track of your PARC coffee bucket balance and does some basic analytics.</div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="visible-xs text-center"><h3><a href="@controllers.mcisCup.routes.Application.index">MCIS Cup</a></h3></div>
+        <h3 class="col-sm-2 text-right hidden-xs"><a href="@controllers.mcisCup.routes.Application.index">MCIS Cup</a></h3>
+        <div class="col-sm-10" style="margin-top: 24px;">Displays and updates scores and other information involving the MCIS cup.</div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="visible-xs text-center"><h3><a href="@controllers.chili.routes.Application.index">Chili</a></h3></div>
+        <h3 class="col-sm-2 text-right hidden-xs"><a href="@controllers.chili.routes.Application.index">Chili</a></h3>
+        <div class="col-sm-10" style="margin-top: 24px;">The chili cookoff voting application.</div>
+    </div>
+    <hr />
+</div>
 }
