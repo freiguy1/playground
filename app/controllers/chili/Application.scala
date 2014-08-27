@@ -22,18 +22,16 @@ object Application extends Controller with securesocial.core.SecureSocial {
   }
 
   // Use this in production
-  def admin = SecuredAction { implicit request =>
+  /*def admin = SecuredAction { implicit request =>
     val userEmail = request.user.asInstanceOf[MyIdentity].userInfo.email
     if(administratorEmails.contains(userEmail))
       Ok(views.html.chili.admin());
     else Forbidden
-  }
+  }*/
 
-  /*
   def admin = UserAwareAction { implicit request =>
     Ok(views.html.chili.admin());
   }
-  */
 
   def addVote(entryId: Int) = Action(parse.json) { implicit request =>
     request.body.validate[VoteDto].map{ newVote =>
