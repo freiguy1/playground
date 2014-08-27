@@ -50,30 +50,36 @@ refreshData = function() {
 var viewModel = {
     loading: ko.observable(true),
     entries: ko.observableArray([]),
-    addEntry: ko.observable({
+    addEntry: {
         name: ko.observable(""),
         number: ko.observable(""),
         chefName: ko.observable(""),
         description: ko.observable(""),
         displayError: ko.observable(false)
-    }),
-    updateEntry: ko.observable({
+    },
+    updateEntry: {
         entryId: ko.observable(),
         name: ko.observable(""),
         number: ko.observable(""),
         chefName: ko.observable(""),
         description: ko.observable(""),
         displayError: ko.observable(false)
-    })
+    },
+    confirmModal: {
+        yesText: ko.observable(""),
+        noText: ko.observable(""),
+        messageText: ko.observable(""),
+        clicked: function(result) { }
+    }
 }
 
 viewModel.addEntryClicked = function() {
-    viewModel.addEntry().name("")
-    viewModel.addEntry().number(viewModel.nextEntryNumber())
-    viewModel.addEntry().chefName("")
-    viewModel.addEntry().description("")
+    viewModel.addEntry.name("")
+    viewModel.addEntry.number(viewModel.nextEntryNumber())
+    viewModel.addEntry.chefName("")
+    viewModel.addEntry.description("")
 
-    viewModel.addEntry().displayError(false)
+    viewModel.addEntry.displayError(false)
 
     $('#addEntryModal').modal()
 }
@@ -96,58 +102,81 @@ viewModel.nextEntryNumber = ko.computed(function() {
 })
 
 viewModel.addEntryModalClicked = function() {
-    viewModel.addEntry().displayError(false)
-    var description = viewModel.addEntry().description()
+    viewModel.addEntry.displayError(false)
+    var description = viewModel.addEntry.description()
     if(!description || description.match(/^ *$/) !== null) {
         description = null
     }
     adminAjax.addEntry({
-        name: viewModel.addEntry().name(),
-        number: parseInt(viewModel.addEntry().number()),
-        chefName: viewModel.addEntry().chefName(),
+        name: viewModel.addEntry.name(),
+        number: parseInt(viewModel.addEntry.number()),
+        chefName: viewModel.addEntry.chefName(),
         description: description
     }).done(function() {
         $('#addEntryModal').modal('hide')
         refreshData()
     }).fail(function() {
-        viewModel.addEntry().displayError(true)
+        viewModel.addEntry.displayError(true)
     })
 }
 
 
 viewModel.updateEntryClicked = function(data) {
-    viewModel.updateEntry().entryId(data.entryId())
-    viewModel.updateEntry().name(data.name())
-    viewModel.updateEntry().number(data.number())
-    viewModel.updateEntry().chefName(data.chefName())
-    viewModel.updateEntry().description(data.description())
+    viewModel.updateEntry.entryId(data.entryId())
+    viewModel.updateEntry.name(data.name())
+    viewModel.updateEntry.number(data.number())
+    viewModel.updateEntry.chefName(data.chefName())
+    viewModel.updateEntry.description(data.description())
 
-    viewModel.updateEntry().displayError(false)
+    viewModel.updateEntry.displayError(false)
 
     $('#updateEntryModal').modal()
 }
 
 viewModel.updateEntryModalClicked = function() {
-    viewModel.updateEntry().displayError(false)
-    var description = viewModel.updateEntry().description()
+    viewModel.updateEntry.displayError(false)
+    var description = viewModel.updateEntry.description()
     if(!description || description.match(/^ *$/) !== null) {
         description = null
     }
-    adminAjax.updateEntry(viewModel.updateEntry().entryId(), {
-        name: viewModel.updateEntry().name(),
-        number: parseInt(viewModel.updateEntry().number()),
-        chefName: viewModel.updateEntry().chefName(),
+    adminAjax.updateEntry(viewModel.updateEntry.entryId(), {
+        name: viewModel.updateEntry.name(),
+        number: parseInt(viewModel.updateEntry.number()),
+        chefName: viewModel.updateEntry.chefName(),
         description: description
     }).done(function() {
         $('#updateEntryModal').modal('hide')
         refreshData()
     }).fail(function() {
-        viewModel.updateEntry().displayError(true)
+        viewModel.updateEntry.displayError(true)
     });
 }
 
 viewModel.deleteEntryClicked = function(data) {
-    adminAjax.deleteEntry(data.entryId()).done(function() {
-        refreshData()
+    showConfirmModal(
+        "Delete", 
+        "Cancel", 
+        "All votes for this chili will be removed.", 
+        function(result) {
+        if(result) {
+            adminAjax.deleteEntry(data.entryId()).done(function() {
+                refreshData()
+            })
+        } else {
+
+        }
     })
+
+}
+
+showConfirmModal = function(
+    yesText,
+    noText,
+    messageText,
+    func) {
+    viewModel.confirmModal.yesText(yesText)
+    viewModel.confirmModal.noText(noText)
+    viewModel.confirmModal.messageText(messageText)
+    viewModel.confirmModal.clicked = func
+    $("#confirmModal").modal()
 }
