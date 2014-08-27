@@ -6,7 +6,6 @@ import play.api.Play.current
 import play.api.libs.json._
 
 import models.chili._
-import models.MyIdentity
 
 object Application extends Controller with securesocial.core.SecureSocial {
   implicit val entryFormat = Json.format[Entry]
@@ -14,23 +13,9 @@ object Application extends Controller with securesocial.core.SecureSocial {
   implicit val voteFormat = Json.format[Vote]
   implicit val voteDtoFormat = Json.format[VoteDto]
 
-  lazy val administratorEmails = 
-    play.api.Play.configuration.getStringList("chili.administrators").get
 
   def index = Action { implicit request =>
     Ok(views.html.chili.index())
-  }
-
-  // Use this in production
-  /*def admin = SecuredAction { implicit request =>
-    val userEmail = request.user.asInstanceOf[MyIdentity].userInfo.email
-    if(administratorEmails.contains(userEmail))
-      Ok(views.html.chili.admin());
-    else Forbidden
-  }*/
-
-  def admin = UserAwareAction { implicit request =>
-    Ok(views.html.chili.admin());
   }
 
   def addVote(entryId: Int) = Action(parse.json) { implicit request =>
@@ -44,20 +29,6 @@ object Application extends Controller with securesocial.core.SecureSocial {
     Ok(Json.toJson(Accessor.getVotesByEntry(entryId)))
   }
 
-  def addEntry = Action(parse.json) { implicit request =>
-    request.body.validate[EntryDto].map{ newEntry =>
-      val newEntryId = Accessor.addEntry(newEntry.toEntry(0))
-      Ok(Json.toJson(Map("id" -> newEntryId)))
-    }.recoverTotal(e => BadRequest("Detected Error: " + JsError.toFlatJson(e)))
-  }
-
-  def updateEntry(entryId: Int) = Action(parse.json) { implicit request => 
-    request.body.validate[EntryDto].map { updatedEntry =>
-      Accessor.updateEntry(updatedEntry.toEntry(entryId))
-      NoContent
-    }.recoverTotal(e => BadRequest("Detected Error: " + JsError.toFlatJson(e)))
-  }
-
   def getEntries() = Action { implicit request => 
     Ok(Json.toJson(Accessor.getEntries))
   }
@@ -68,10 +39,42 @@ object Application extends Controller with securesocial.core.SecureSocial {
     ).getOrElse(NotFound)
   }
 
-  def deleteEntry(entryId: Int) = Action { implicit request =>
+  // PRIVATE
+  // Use this in production
+  /*def admin = SecuredAction { implicit request =>
+    if(isAdmin(request.user))
+      Ok(views.html.chili.admin());
+    else Forbidden
+  }*/
+
+  // PRIVATE
+  def admin = SecuredAction(new AdminAuth) { implicit request =>
+    Ok(views.html.chili.admin());
+  }
+
+
+  // PRIVATE
+  def addEntry = SecuredAction(true, new AdminAuth)(parse.json) { implicit request =>
+    request.body.validate[EntryDto].map{ newEntry =>
+      val newEntryId = Accessor.addEntry(newEntry.toEntry(0))
+      Ok(Json.toJson(Map("id" -> newEntryId)))
+    }.recoverTotal(e => BadRequest("Detected Error: " + JsError.toFlatJson(e)))
+  }
+
+  // PRIVATE
+  def updateEntry(entryId: Int) = SecuredAction(true, new AdminAuth)(parse.json) { implicit request => 
+    request.body.validate[EntryDto].map { updatedEntry =>
+      Accessor.updateEntry(updatedEntry.toEntry(entryId))
+      NoContent
+    }.recoverTotal(e => BadRequest("Detected Error: " + JsError.toFlatJson(e)))
+  }
+
+  // PRIVATE
+  def deleteEntry(entryId: Int) = SecuredAction(true, new AdminAuth) { implicit request =>
     Accessor.deleteEntry(entryId)
     NoContent
   }
+
 }
 
 case class EntryDto(
@@ -94,3 +97,4 @@ case class VoteDto(
   def toVote(entryId: Int, date: java.util.Date): Vote =
     Vote(entryId, this.voterName, this.comment, date)
 }
+

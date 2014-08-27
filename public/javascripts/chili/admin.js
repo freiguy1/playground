@@ -159,8 +159,12 @@ viewModel.deleteEntryClicked = function(data) {
         "All votes for this chili will be removed.", 
         function(result) {
         if(result) {
+            viewModel.loading(true)
             adminAjax.deleteEntry(data.entryId()).done(function() {
                 refreshData()
+            }).fail(function() {
+                alert('There was a problem deleting that chili')
+                viewModel.loading(false)
             })
         } else {
 
