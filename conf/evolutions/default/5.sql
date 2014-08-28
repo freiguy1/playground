@@ -5,6 +5,7 @@ CREATE TABLE entry (
     number INT NOT NULL,
     name VARCHAR(128) NOT NULL,
     chefName VARCHAR(128) NOT NULL,
+    spicyLevel VARCHAR(128) NOT NULL,
     description VARCHAR(2048) NULL,
     PRIMARY KEY(entryId)
 );

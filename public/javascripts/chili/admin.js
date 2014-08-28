@@ -54,6 +54,7 @@ var viewModel = {
         name: ko.observable(""),
         number: ko.observable(""),
         chefName: ko.observable(""),
+        spicyLevel: ko.observable(""),
         description: ko.observable(""),
         displayError: ko.observable(false)
     },
@@ -62,6 +63,7 @@ var viewModel = {
         name: ko.observable(""),
         number: ko.observable(""),
         chefName: ko.observable(""),
+        spicyLevel: ko.observable(""),
         description: ko.observable(""),
         displayError: ko.observable(false)
     },
@@ -71,17 +73,6 @@ var viewModel = {
         messageText: ko.observable(""),
         clicked: function(result) { }
     }
-}
-
-viewModel.addEntryClicked = function() {
-    viewModel.addEntry.name("")
-    viewModel.addEntry.number(viewModel.nextEntryNumber())
-    viewModel.addEntry.chefName("")
-    viewModel.addEntry.description("")
-
-    viewModel.addEntry.displayError(false)
-
-    $('#addEntryModal').modal()
 }
 
 viewModel.nextEntryNumber = ko.computed(function() {
@@ -101,6 +92,18 @@ viewModel.nextEntryNumber = ko.computed(function() {
     return result
 })
 
+viewModel.addEntryClicked = function() {
+    viewModel.addEntry.name("")
+    viewModel.addEntry.number(viewModel.nextEntryNumber())
+    viewModel.addEntry.chefName("")
+    viewModel.addEntry.description("")
+    viewModel.addEntry.spicyLevel("Mild")
+
+    viewModel.addEntry.displayError(false)
+
+    $('#addEntryModal').modal()
+}
+
 viewModel.addEntryModalClicked = function() {
     viewModel.addEntry.displayError(false)
     var description = viewModel.addEntry.description()
@@ -111,6 +114,7 @@ viewModel.addEntryModalClicked = function() {
         name: viewModel.addEntry.name(),
         number: parseInt(viewModel.addEntry.number()),
         chefName: viewModel.addEntry.chefName(),
+        spicyLevel: viewModel.addEntry.spicyLevel(),
         description: description
     }).done(function() {
         $('#addEntryModal').modal('hide')
@@ -127,6 +131,7 @@ viewModel.updateEntryClicked = function(data) {
     viewModel.updateEntry.number(data.number())
     viewModel.updateEntry.chefName(data.chefName())
     viewModel.updateEntry.description(data.description())
+    viewModel.updateEntry.spicyLevel(data.spicyLevel())
 
     viewModel.updateEntry.displayError(false)
 
@@ -143,6 +148,7 @@ viewModel.updateEntryModalClicked = function() {
         name: viewModel.updateEntry.name(),
         number: parseInt(viewModel.updateEntry.number()),
         chefName: viewModel.updateEntry.chefName(),
+        spicyLevel: viewModel.updateEntry.spicyLevel(),
         description: description
     }).done(function() {
         $('#updateEntryModal').modal('hide')

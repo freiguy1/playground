@@ -9,6 +9,7 @@ case class Entry(
   name: String,
   number: Int,
   chefName: String,
+  spicyLevel: String,
   description: Option[String]
 )
 
@@ -19,8 +20,9 @@ class EntryTable(tag: Tag) extends Table[Entry](tag, "entry"){
   def name = column[String]("name", O.NotNull)
   def number = column[Int]("number", O.NotNull)
   def chefName = column[String]("chefName", O.NotNull)
+  def spicyLevel = column[String]("spicyLevel", O.NotNull)
   def description = column[Option[String]]("description")
   
-  def * = (entryId, name, number, chefName, description) <> (Entry.tupled, Entry.unapply)
+  def * = (entryId, name, number, chefName, spicyLevel, description) <> (Entry.tupled, Entry.unapply)
 }
 

@@ -13,6 +13,7 @@ object Application extends Controller with securesocial.core.SecureSocial {
   implicit val voteFormat = Json.format[Vote]
   implicit val voteDtoFormat = Json.format[VoteDto]
 
+  val spicyLevels = Seq("Mild", "Medium", "Hot")
 
   def index = Action { implicit request =>
     Ok(views.html.chili.index())
@@ -56,16 +57,24 @@ object Application extends Controller with securesocial.core.SecureSocial {
   // PRIVATE
   def addEntry = SecuredAction(true, new AdminAuth)(parse.json) { implicit request =>
     request.body.validate[EntryDto].map{ newEntry =>
-      val newEntryId = Accessor.addEntry(newEntry.toEntry(0))
-      Ok(Json.toJson(Map("id" -> newEntryId)))
+      if(spicyLevels.contains(newEntry.spicyLevel)) {
+        val newEntryId = Accessor.addEntry(newEntry.toEntry(0))
+        Ok(Json.toJson(Map("id" -> newEntryId)))
+      } else {
+        BadRequest("spicyLevel must be one of 'Mild', 'Medium', or 'Hot'")
+      }
     }.recoverTotal(e => BadRequest("Detected Error: " + JsError.toFlatJson(e)))
   }
 
   // PRIVATE
   def updateEntry(entryId: Int) = SecuredAction(true, new AdminAuth)(parse.json) { implicit request => 
     request.body.validate[EntryDto].map { updatedEntry =>
-      Accessor.updateEntry(updatedEntry.toEntry(entryId))
-      NoContent
+      if(spicyLevels.contains(updatedEntry.spicyLevel)) {
+        Accessor.updateEntry(updatedEntry.toEntry(entryId))
+        NoContent
+      } else {
+        BadRequest("spicyLevel must be one of 'Mild', 'Medium', or 'Hot'")
+      }
     }.recoverTotal(e => BadRequest("Detected Error: " + JsError.toFlatJson(e)))
   }
 
@@ -81,13 +90,14 @@ case class EntryDto(
   name: String,
   number: Int,
   chefName: String,
+  spicyLevel: String,
   description: Option[String]
 ) {
 
-  def this(entry: Entry) = this(entry.name, entry.number, entry.chefName, entry.description)
+  def this(entry: Entry) = this(entry.name, entry.number, entry.chefName, entry.spicyLevel, entry.description)
 
   def toEntry(entryId: Int): Entry =
-    Entry(entryId, this.name, this.number, this.chefName, this.description)
+    Entry(entryId, this.name, this.number, this.chefName, this.spicyLevel, this.description)
 }
 
 case class VoteDto(
