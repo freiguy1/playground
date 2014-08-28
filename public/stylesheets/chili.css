@@ -1,0 +1,157 @@
+html {
+    min-height: 100%;
+}
+
+body {
+    background: url('../images/bg-blur.jpg') center center no-repeat;
+    background-size: cover;
+    font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    min-height: 100%;
+    min-width: 100%;
+    -webkit-font-smoothing: antialiased;
+}
+
+.vote-container {
+    background: rgba(46,46,46,0.75);
+    border-radius: 10px;
+    color: #FFFFFF;
+    box-shadow: 0px 0px 40px 5px rgba(255,255,255,0.25);
+    margin-top: 100px;
+    min-height: 500px;
+    padding: 20px;
+}
+
+h1 {
+    font-family: 'Bubblegum Sans', cursive;
+    font-size: 70px;
+    margin-bottom: 50px;
+    text-align: center;
+    text-shadow: 2px 2px #3C3C3C;
+}
+
+.admin-link {
+    margin-top: 5px;
+    text-align: center;
+}
+
+.admin-link > a {
+    color: #000000;
+}
+
+.admin-link > a:hover {
+    color: #3C3C3C;
+}
+
+.entry {
+    background: rgba(46,46,46,0.75);
+    border-radius: 5px;
+    cursor: pointer;
+    min-height: 120px;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.entry-number {
+    background: #3c3c3c;
+    border-radius: 5px 0px 0px 5px;
+    font-size: 75px;
+    height: 100%;
+    position: absolute;
+    text-align: center;
+    width: 60px;
+    z-index: 200;
+}
+
+.entry-vote-overlay {
+    background: none;
+    border-radius: 10px 5px 5px 10px;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 0;
+    z-index: 100;
+    transition: all .5s ease-in-out;
+}
+
+.entry-vote-text {
+    color: #2F2F2F;
+    font-size: 60px;
+    padding-left: 20px;
+    padding-top: 15px;
+    text-align: center;
+}
+
+.entry:hover .entry-vote-overlay {
+    background: rgba(122,122,122,.85);
+    width: 100%;
+}
+
+.entry-title {
+    font-size: 20px;
+    padding: 5px;
+    padding-left: 60px;
+    text-align: center;
+}
+
+.entry-description {
+    padding: 10px;
+    padding-left: 70px;
+}
+
+.entry .spiciness {
+    opacity: .75;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+.mild-chili .icon-fire {
+    color: rgba(0,128,0,1);
+}
+
+.medium-chili .icon-fire {
+    color: rgba(255,255,0,1);
+}
+
+.hot-chili .icon-fire {
+    color: rgba(255,0,0,1);
+}
+
+@font-face {
+	font-family: 'icomoon';
+	src:url('../fonts/icomoon.eot?-xim2kz');
+	src:url('../fonts/icomoon.eot?#iefix-xim2kz') format('embedded-opentype'),
+		url('../fonts/icomoon.woff?-xim2kz') format('woff'),
+		url('../fonts/icomoon.ttf?-xim2kz') format('truetype'),
+		url('../fonts/icomoon.svg?-xim2kz#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    @font-face {
+        font-family: 'icomoon';
+        src: url('../fonts/icomoon.svg?-xim2kz#icomoon') format('svg');
+    }
+}
+
+.font-icon {
+	speak: none;
+	font-family: 'icomoon';
+	font-size: 20px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: 1;
+	text-transform: none;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+
+.icon-fire:before {
+	content: "\e600";
+}
