@@ -44,6 +44,12 @@
                         <!-- ko if: spicyLevel() === "Mild" -->
                         <span class="font-icon icon-fire" style="color: rgba(0,128,0,1);"></span> 
                         <!-- /ko -->
+                        <!-- ko if: spicyLevel() === "Medium" -->
+                        <span class="font-icon icon-fire" style="color: rgba(255,255,0,1);"></span> 
+                        <!-- /ko -->
+                        <!-- ko if: spicyLevel() === "Hot" -->
+                        <span class="font-icon icon-fire" style="color: rgba(255,0,0,1);"></span> 
+                        <!-- /ko -->
                         <span style="font-weight: bold;" data-bind="text: name"></span>
                     </h4>
                     <span> by </span>
