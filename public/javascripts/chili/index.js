@@ -12,6 +12,13 @@ function ChiliViewModel() {
     self.initialize = function(){
         self.loading(true);
         publicAjax.getEntries().done(function(result){
+            $.each(result, function(index, value) {
+                if(!value.description)
+                    value.description = null;
+            });
+            result.sort(function(left, right) {
+                return left.number - right.number;
+            });
             ko.mapping.fromJS(result, {}, viewModel.entries);
             self.loading(false);
         });

@@ -45,7 +45,7 @@
                 <h3>Contenders</h3>
                 <div class="row" data-bind="foreach: entries">
                     <div class="col-sm-6">
-                        <div class="entry" data-bind="css: $root.spiciness ">
+                        <div class="entry" data-bind="css: spicyLevel().toLowerCase() + '-chili' ">
                             <div class="entry-number" data-bind="text: number"></div>
                             <div class="entry-vote-overlay">
                                 <div class="entry-vote-text">
@@ -55,61 +55,11 @@
                             <div class="spiciness">
                                 <span class="font-icon icon-fire"></span>
                             </div>
-                            <div class="entry-title">Super Great Chili</div>
-                            <div class="entry-description">Bacon ipsum dolor sit amet strip steak cow shankle, frankfurter salami tri-tip jowl pancetta pork hamburger sirloin pork chop ground round meatloaf bacon.</div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="entry medium-chili">
-                            <div class="entry-number">
-                                2
-                            </div>
-                            <div class="entry-vote-overlay">
-                                <div class="entry-vote-text">
-                                    VOTE
-                                </div>
-                            </div>
-                            <div class="spiciness">
-                                <span class="font-icon icon-fire"></span>
-                            </div>
-                            <div class="entry-title">Fantastic Chili</div>
-                            <div class="entry-description">Pig pastrami turkey, tenderloin ground round jerky strip steak kevin frankfurter brisket corned beef. Pancetta corned beef tenderloin turducken beef ribs turkey frankfurter kevin.</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="entry hot-chili">
-                            <div class="entry-number">
-                                3
-                            </div>
-                            <div class="entry-vote-overlay">
-                                <div class="entry-vote-text">
-                                    VOTE
-                                </div>
-                            </div>
-                            <div class="spiciness">
-                                <span class="font-icon icon-fire"></span>
-                            </div>
-                            <div class="entry-title">The Best Chili</div>
-                            <div class="entry-description">Boudin leberkas brisket turducken, corned beef fatback pancetta kevin shankle sirloin filet mignon pork chop frankfurter.</div>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="entry mild-chili">
-                            <div class="entry-number">
-                                4
-                            </div>
-                            <div class="entry-vote-overlay">
-                                <div class="entry-vote-text">
-                                    VOTE
-                                </div>
-                            </div>
-                            <div class="spiciness">
-                                <span class="font-icon icon-fire"></span>
-                            </div>
-                            <div class="entry-title">Another Chili</div>
-                            <div class="entry-description">Bacon tri-tip short ribs frankfurter.</div>
+                            <div class="entry-title" data-bind="text: name"></div>
+                            <div class="entry-description" data-bind="text: description"></div>
+                            <!-- ko if: description() === null -->
+                                <em class="entry-description" style="color: rgba(255,255,255,0.3);">No description</em>
+                            <!-- /ko -->
                         </div>
                     </div>
                 </div>
