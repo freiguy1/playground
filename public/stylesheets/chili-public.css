@@ -23,6 +23,7 @@ body {
 
 .header-container {
     margin-bottom: 50px;
+    margin-top: 10px;
     text-align: center;
     text-shadow: 2px 2px #3C3C3C;
 }
@@ -30,7 +31,7 @@ body {
 .header-container .title {
     font-family: 'Bubblegum Sans', cursive;
     font-size: 70px;
-    line-height: 1;
+    line-height: .85;
 }
 
 .header-deco-container {
@@ -39,8 +40,31 @@ body {
 
 .header-deco {
     font-family: "Zakia", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 20px;
-    opacity: .75;
+    font-size: 17px;
+    opacity: .65;
+}
+
+.deco-line-container {
+    display: inline-block;
+    margin-top: 10px;
+    opacity: .25;
+    padding: 0 5px;
+    vertical-align: top;
+}
+
+.deco-line-container > span {
+    background: #FFFFFF;
+    display: block;
+    height: 1px;
+}
+
+.deco-line-long {
+    width: 130px;
+}
+
+.deco-line-short {
+    margin-top: 5px;
+    width: 120px;
 }
 
 .admin-link {
