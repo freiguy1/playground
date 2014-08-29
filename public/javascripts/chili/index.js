@@ -16,4 +16,7 @@ function ChiliViewModel() {
             self.loading(false);
         });
     };
+    self.spiciness = ko.computed(function(){
+        return '-chili';
+    }, this);
 }
