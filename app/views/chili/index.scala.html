@@ -47,7 +47,7 @@
                 <h3>Contenders</h3>
                 <div class="row" data-bind="foreach: entries">
                     <div class="col-sm-6">
-                        <div class="entry" data-bind="css: spicyLevel().toLowerCase() + '-chili' ">
+                        <div class="entry" data-bind="css: spicyLevel().toLowerCase() + '-chili', click: $root.setVoteFor" data-toggle="modal" data-target="#vote-modal">
                             <div class="entry-number" data-bind="text: number"></div>
                             <div class="entry-vote-overlay">
                                 <div class="entry-vote-text">
@@ -70,6 +70,47 @@
                 <a href="@controllers.chili.routes.Application.admin">Administrate</a>
             </div>
         </div>
+
+        <div class="modal fade" id="vote-modal" tabindex="-1" role="dialog" aria-labelledby="vote-modal-title" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content" data-bind="with: voteFor, visible: !thankYou()">
+                    <div class="modal-header">
+                        <h3 class="modal-title text-center" id="vote-modal-title">Are you sure this is the chili for you?</h3>
+                        <a href="#" class="close" data-dismiss="modal">No, cancel!</a>
+                    </div>
+                    <div class="modal-body">
+                        <h3>Show some <span class="font-icon icon-heart-line"></span></h3>
+                        <br/>
+                        <label for="voter-name">
+                            Name (Optional)
+                        </label>
+                        <input id="voter-name" type="text" class="form-control" data-bind="value: voterName" />
+                        <br/>
+                        <label for="voter-comments">
+                            Comments (Optional)
+                        </label>
+                        <textarea id="voter-comments" type="text" class="form-control" data-bind="value: voterComments"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bind="click: $root.submitVote">
+                            <span>
+                                Yes, Place Vote!
+                            </span>
+                            <small>#<span data-bind="text: entryNumber"></span> <span data-bind="text: entryName"></span></small>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-content text-center" data-bind="with: voteFor, visible: thankYou">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="vote-modal-title">Thanks for voting!</h3>
+                    </div>
+                    <div class="modal-body">
+                        <h3>Your vote for #<span data-bind="text: entryNumber"></span> <span data-bind="text: entryName"></span> has been added.</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <script src="@routes.Assets.at("javascripts/chili/ajax.js")" type="text/javascript"></script>
         <script src="@routes.Assets.at("javascripts/chili/index.js")" type="text/javascript"></script>
     </body>
