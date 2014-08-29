@@ -68,6 +68,8 @@ GET    /chili/admin  controllers.chili.Application.admin
 
 GET    /chili/entries/:id/votes controllers.chili.Application.getVotesByEntry(id: Int)
 POST   /chili/entries/:id/votes controllers.chili.Application.addVote(id: Int)
+GET    /chili/:uuid             controllers.chili.Application.uuidUpdateEntry(uuid: String)
+POST   /chili/:uuid             controllers.chili.Application.uuidUpdateEntrySubmit(uuid: String)
 
 GET    /chili/entries         controllers.chili.Application.getEntries
 GET    /chili/entries/:id     controllers.chili.Application.getEntry(id: Int)

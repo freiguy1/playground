@@ -23,6 +23,7 @@ case class Entry (
   number: Int,
   chefName: String,
   spicyLevel: String,
+  uuid: String,
   description: Option[String]
 )
 
@@ -54,24 +55,24 @@ object Accessor {
    *****************/
   def addEntry(newEntry: Entry): Int = database.withDynSession {
     entryTable returning entryTable.map(_.entryId) += 
-      db.Entry(0, newEntry.name, newEntry.number, newEntry.chefName, newEntry.spicyLevel, newEntry.description)
+      db.Entry(0, newEntry.name, newEntry.number, newEntry.chefName, newEntry.spicyLevel, newEntry.uuid, newEntry.description)
   }
 
   def getEntries(): Seq[Entry] = database.withDynSession {
     //teamTable.list.map(row => Team(row.teamId, row.name, row.captainName))
-    entryTable.list.map(row => Entry(row.entryId, row.name, row.number, row.chefName, row.spicyLevel, row.description))
+    entryTable.list.map(row => Entry(row.entryId, row.name, row.number, row.chefName, row.spicyLevel, row.uuid, row.description))
   }
 
   def updateEntry(entry: Entry): Unit = database.withDynSession {
     entryTable
       .filter(_.entryId === entry.entryId)
-      .update(db.Entry(entry.entryId, entry.name, entry.number, entry.chefName, entry.spicyLevel, entry.description))
+      .update(db.Entry(entry.entryId, entry.name, entry.number, entry.chefName, entry.spicyLevel, entry.uuid, entry.description))
   }
 
   def getEntry(entryId: Int): Option[Entry] = database.withDynSession {
     entryTable.filter(_.entryId === entryId)
       .firstOption
-      .map(row => Entry(row.entryId, row.name, row.number, row.chefName, row.spicyLevel, row.description))
+      .map(row => Entry(row.entryId, row.name, row.number, row.chefName, row.spicyLevel, row.uuid, row.description))
   }
 
   def deleteEntry(entryId: Int): Unit = database.withDynSession {
