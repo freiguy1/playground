@@ -69,6 +69,12 @@ object Accessor {
       .update(db.Entry(entry.entryId, entry.name, entry.number, entry.chefName, entry.spicyLevel, entry.uuid, entry.description))
   }
 
+  def getEntryByUuid(uuid: String): Option[Entry] = database.withDynSession {
+    entryTable.filter(_.uuid === uuid)
+      .firstOption
+      .map(row => Entry(row.entryId, row.name, row.number, row.chefName, row.spicyLevel, row.uuid, row.description))
+  }
+
   def getEntry(entryId: Int): Option[Entry] = database.withDynSession {
     entryTable.filter(_.entryId === entryId)
       .firstOption

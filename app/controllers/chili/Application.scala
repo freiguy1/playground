@@ -5,6 +5,7 @@ import play.api.mvc._
 import play.api.Play.current
 import play.api.libs.json._
 import play.api.data._
+import play.api.data.validation._
 import play.api.data.Forms._
 
 import models.chili._
@@ -56,11 +57,25 @@ object Application extends Controller with securesocial.core.SecureSocial {
   }
 
   def uuidUpdateEntry(uuid: String) = Action { implicit request => 
-    Ok("done")
+    Accessor.getEntryByUuid(uuid).map { dbEntry =>  
+      val dto = new EntryDto(dbEntry)
+      Ok(views.html.chili.update(uuid, entryForm.fill(dto)))
+    }.getOrElse(NotFound)
   }
 
   def uuidUpdateEntrySubmit(uuid: String) = Action { implicit request =>
-    Ok("done")
+    entryForm.bindFromRequest.fold(
+      formWithErrors => {
+        BadRequest("Bad, u bad")
+        //BadRequest(views.html.user(formWithErrors))
+      },
+      updatedEntry => {
+        Accessor.getEntryByUuid(uuid).map( dbEntry => { 
+          Accessor.updateEntry(updatedEntry.toEntry(dbEntry.entryId, dbEntry.uuid))
+          Redirect(controllers.chili.routes.Application.index)
+        }).getOrElse(NotFound)
+      }
+    )
   }
 
   // PRIVATE
@@ -102,6 +117,14 @@ object Application extends Controller with securesocial.core.SecureSocial {
       case _ => None
     })
   )
+
+  val decentSpicyLevel: Constraint[String] = Constraint("entry.spicyLevel")({ text =>
+    if(spicyLevels.contains(text)){
+      Valid
+    } else {
+      Invalid(Seq(ValidationError("Not a proper spicyLevel")))
+    }
+  })
 }
 
 
