@@ -66,8 +66,7 @@ object Application extends Controller with securesocial.core.SecureSocial {
   def uuidUpdateEntrySubmit(uuid: String) = Action { implicit request =>
     entryForm.bindFromRequest.fold(
       formWithErrors => {
-        BadRequest("Bad, u bad")
-        //BadRequest(views.html.user(formWithErrors))
+        BadRequest(views.html.chili.update(uuid, formWithErrors))
       },
       updatedEntry => {
         Accessor.getEntryByUuid(uuid).map( dbEntry => { 
