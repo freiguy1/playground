@@ -18,14 +18,18 @@
 		</form>
 		<h4 style="margin-top: 40px; text-align: center;">I just bought a...</h4>
 		<div class="text-center">
-		    <div class="btn-group">
-			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-.5, 'pop') }">can o' pop</button>
-			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-.5, 'water') }">water</button>
-			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-5, 'pizza') }">pizza</button>
-			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-2, 'red bull') }">red bull</button>
-			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-1, 'snack') }">snack</button>
-			<button type="button" class="btn btn-default" data-bind="click: function() { boughtClicked(-1.5, 'king candy') }">king candy</button>
-		    </div>
+                    <div class="btn-group">
+                        <button type="button" 
+                            class="btn btn-default" 
+                            data-bind="text: firstItem().display, click: function() { boughtClicked(firstItem().price, firstItem().name) }"></button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu text-left" role="menu" data-bind="foreach: tailItems">
+                            <li><a href="#" data-bind="text: display, click: function() { $root.boughtClicked(price, name) }"></a></li>
+                        </ul>
+                    </div>
 		</div>
 		<div style="margin: 20px 0px; text-align: center;">
 		    <div class="btn-group" data-toggle="buttons" style="">

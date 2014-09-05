@@ -8,8 +8,8 @@ $(function () {
     })
     
     $( window ).resize(function(){
-	fillLineGraph()
-	fillPieGraph()
+        fillLineGraph()
+        fillPieGraph()
     })
 
 })
@@ -23,8 +23,22 @@ function initViewModel(){
 var viewModel = {
     balanceAmount: ko.observable(),
     transactions: ko.observableArray([]),
-    xMinimum: ko.observable("week")
+    xMinimum: ko.observable("week"),
+    items: ko.observableArray([
+        new Item("pop", .5),
+        new Item("water", .5),
+        new Item("pizza", 5),
+        new Item("mini pizza", 2),
+        new Item("kurig cup", 1),
+        new Item("snack", 1),
+        new Item("chips", .5),
+        new Item("king candy bar", 1.5)
+    ])
 }
+
+viewModel.firstItem= ko.observable(viewModel.items()[0])
+
+viewModel.tailItems= ko.observableArray(viewModel.items().slice(1))
 
 viewModel.balanceAmountDisplay = ko.computed(function(){
     if(viewModel.balanceAmount() || viewModel.balanceAmount() === 0)
@@ -128,6 +142,13 @@ function fillLineGraph() {
 	    hoverable: true
 	})
     }
+}
+
+function Item(name, price) {
+    var me = this
+    me.display = name + " (" + getDollarString(price) + ")"
+    me.name = name
+    me.price = 0 - price
 }
 
 function Transaction(id, amount, time, note) {
