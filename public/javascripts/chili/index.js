@@ -51,6 +51,70 @@ function ChiliViewModel() {
     self.hideThankYou = function(){
         $('.modal').modal('hide');
     };
+
+    self.addEntry = {
+        name: ko.observable(""),
+        number: ko.observable(""),
+        chefName: ko.observable(""),
+        spicyLevel: ko.observable(""),
+        description: ko.observable(""),
+        displayError: ko.observable(false),
+        editUrl: ko.observable(""),
+        addChiliConfirmation: ko.observable(false)
+    };
+    
+    self.addEntryClicked = function() {
+        self.addEntry.name("")
+        self.addEntry.number(viewModel.nextEntryNumber())
+        self.addEntry.chefName("")
+        self.addEntry.description("")
+        self.addEntry.spicyLevel("Mild")
+
+        self.addEntry.displayError(false)
+        self.addEntry.editUrl("")
+        self.addEntry.addChiliConfirmation(false)
+
+        $('#addEntryModal').modal()
+    }
+    
+    self.nextEntryNumber = ko.computed(function() {
+        var highest = 1
+        var numbers = $.map(self.entries(), function(value) {
+            return value.number()
+        })
+        $.each(numbers, function(index, value) {
+            if(value > highest)
+                highest = value
+        })
+        var result = highest + 1
+        for(i = highest; i > 0; i--) {
+            if($.inArray(i, numbers) == -1) 
+                result = i;
+        }
+        return result
+    })
+
+    self.addEntryModalClicked = function() {
+        self.addEntry.displayError(false)
+        var description = viewModel.addEntry.description()
+        if(!description || description.match(/^ *$/) !== null) {
+            description = null
+        }
+        adminAjax.addEntry({
+            name: self.addEntry.name(),
+            number: parseInt(self.addEntry.number()),
+            chefName: self.addEntry.chefName(),
+            spicyLevel: self.addEntry.spicyLevel(),
+            description: description
+        }).done(function(data) {
+            self.addEntry.editUrl(window.location.host + "/chili/" + data.uuid)
+            self.addEntry.addChiliConfirmation(true)
+            self.initialize()
+        }).fail(function() {
+            self.addEntry.displayError(true)
+        })
+    }
+
 }
 
 function Entry(entryName, entryNumber, voterName, voterComments) {

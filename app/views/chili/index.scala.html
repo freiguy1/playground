@@ -67,9 +67,84 @@
                 </div>
             </div>
             <div class="admin-link">
-                <a href="@controllers.chili.routes.Application.admin">Administrate</a>
+                <a href="@controllers.chili.routes.Application.admin">Administrate</a> | 
+                <a href="#" data-bind="click: addEntryClicked">Create an Entry</a>
             </div>
         </div>
+
+        <div class="modal fade" id="addEntryModal" data-bind="with: addEntry">
+            <div class="modal-dialog">
+                <div class="modal-content" data-bind="visible: !addChiliConfirmation()">
+                    <div class="modal-header">
+                        <h3 class="modal-title text-center" id="vote-modal-title">Create a new Chili Entry</h3>
+                        <a href="#" class="close" data-dismiss="modal">Cancel</a>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger" 
+                            data-bind="visible: displayError">
+                            There was a problem adding the chili entry.
+                        </div>
+                        <div class="form-group">
+                            <label for="addEntryNameInput">Chili Name</label>
+                            <input
+                                id="addEntryNameInput"
+                                type="text"
+                                class="form-control"
+                                placeholder="Chili Name"
+                                data-bind="value: name, valueUpdate: 'keypress'">
+                        </div>
+                        <div class="form-group">
+                            <label for="addEntryChefNameInput">Chef Name</label>
+                            <input
+                                id="addEntryChefNameInput"
+                                type="text"
+                                class="form-control"
+                                placeholder="Chef Name"
+                                data-bind="value: chefName, valueUpdate: 'keypress'">
+                        </div>
+                        <div class="form-group">
+                            <label for="addEntrySpicyLevelInput">Spicy Level</label>
+                            <select
+                                id="addEntrySpicyLevelInput"
+                                class="form-control"
+                                data-bind="value: spicyLevel">
+                                <option>Mild</option>
+                                <option>Medium</option>
+                                <option>Hot</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="addEntryDescriptionInput">Description (optional)</label>
+                            <textarea
+                                id="addEntryDescriptionInput"
+                                class="form-control"
+                                placeholder="Description"
+                                data-bind="value: description, valueUpdate: 'keypress'">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button 
+                            type="button" 
+                            class="btn btn-primary" 
+                            style="margin-left: 0px;"
+                            data-bind="click: $root.addEntryModalClicked">Add Entry</button>
+                    </div>
+                </div><!-- /.modal-content -->
+                <div class="modal-content text-center" data-bind="visible: addChiliConfirmation">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="vote-modal-title">Chili entry added</h3>
+                    </div>
+                    <div class="modal-body">
+                        <h3>Bookmark this url in order to edit your chili entry at any time.</h3>
+                        <h3><a data-bind="attr: {href: editUrl}, text: editUrl"></a></h3>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 
         <div class="modal fade" id="vote-modal" tabindex="-1" role="dialog" aria-labelledby="vote-modal-title" aria-hidden="true">
             <div class="modal-dialog">
