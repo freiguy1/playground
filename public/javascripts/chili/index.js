@@ -107,7 +107,7 @@ function ChiliViewModel() {
             spicyLevel: self.addEntry.spicyLevel(),
             description: description
         }).done(function(data) {
-            self.addEntry.editUrl(window.location.host + "/chili/" + data.uuid)
+            self.addEntry.editUrl("http://" + window.location.host + "/chili/" + data.uuid)
             self.addEntry.addChiliConfirmation(true)
             self.initialize()
         }).fail(function() {
