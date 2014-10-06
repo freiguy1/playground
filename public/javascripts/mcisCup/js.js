@@ -69,6 +69,9 @@ function CupViewModel() {
                 return left.totalPoints() == right.totalPoints() ? 0 : (left.totalPoints() > right.totalPoints() ? -1 : 1);
             });
             self.leader(self.teams()[0]);
+            $.each(self.teams(), function(index, team){
+               team.isLeader(team.totalPoints() === self.leader().totalPoints());
+            });
             $('.score-popover').popover();
         });
     };
@@ -79,6 +82,7 @@ function Team(teamId, name, captainName) {
     self.teamId = teamId;
     self.name = ko.observable(name);
     self.captainName = ko.observable(captainName);
+    self.isLeader = ko.observable(false);
     self.results = ko.computed(function(){
         var list = [];
         $.each(viewModel.competitions(), function(i, c){

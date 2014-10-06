@@ -122,8 +122,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     }
 
     .points-leader .points {
+        font-family: "Oswald", sans-serif;
         font-size: 60px;
-        font-weight: 600;
+        font-weight: 700;
         line-height: .8;
         margin-bottom: 10px;
         margin-top: 20px;
@@ -142,6 +143,68 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     color: #ffffff;
     position: absolute;
     width: 100%;
+}
+
+td:first-child {
+    min-width: 300px;
+}
+
+tbody tr.leader {
+    font-size: 130%;
+    font-weight: 700;
+}
+
+.table-striped > tbody > tr.leader > td {
+    background-color: #ffeadd;
+}
+.table-striped > tbody > tr.leader:nth-child(even) > td {
+    background-color: #fff5ee;
+}
+
+.team-points,
+.team-details {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+}
+
+.team-points {
+    height: 40px;
+    margin-right: 10px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.total-points {
+    display: block;
+    font-family: "Oswald", sans-serif;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 1;
+    vertical-align: middle;
+    width: 40px;
+}
+
+tr.leader .total-points {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.team-points .points-label {
+    color: #aaa;
+    display: block;
+    font-size: 10px;
+    margin: auto;
+}
+
+.team-name {
+    display: block;
+}
+
+.team-details .team-captain {
+    color: #999;
+    display: block;
+    font-size: 13px;
 }
 
 .promo-viewer .container-mobile {
