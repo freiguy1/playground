@@ -77,14 +77,25 @@ object Application extends Controller with securesocial.core.SecureSocial {
     )
   }
 
-  // PRIVATE
-  def admin = SecuredAction(new AdminAuth) { implicit request =>
+  // PRIVATE ACTIONS -----------------
+
+  def admin = SecuredAction(new ChiliAdminAuth) { implicit request =>
     Ok(views.html.chili.admin());
   }
 
+  def results = SecuredAction(new ChiliAdminAuth) { implicit request =>
+    val results = Seq(
+      ("Chili 1", 1, 14),
+      ("Chili 2", 2, 10),
+      ("Chili 3", 3, 7),
+      ("Chili 4", 4, 5),
+      ("Chili 5", 5, 20)
+    )
+    Ok(views.html.chili.results(results));
+  }
 
-  // PRIVATE
-  def updateEntry(entryId: Int) = SecuredAction(true, new AdminAuth)(parse.json) { implicit request => 
+
+  def updateEntry(entryId: Int) = SecuredAction(true, new ChiliAdminAuth)(parse.json) { implicit request => 
     request.body.validate[EntryDto].map { updatedEntry =>
       if(spicyLevels.contains(updatedEntry.spicyLevel)) {
         Accessor.getEntry(entryId).map( dbEntry => 
@@ -96,8 +107,7 @@ object Application extends Controller with securesocial.core.SecureSocial {
     }.recoverTotal(e => BadRequest("Detected Error: " + JsError.toFlatJson(e)))
   }
 
-  // PRIVATE
-  def deleteEntry(entryId: Int) = SecuredAction(true, new AdminAuth) { implicit request =>
+  def deleteEntry(entryId: Int) = SecuredAction(true, new ChiliAdminAuth) { implicit request =>
     Accessor.deleteEntry(entryId)
     NoContent
   }

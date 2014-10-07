@@ -59,8 +59,9 @@ GET	/clone/api/time			controllers.clone.api.BaseApi.time
 #####################################
 #              CHILI                #
 #####################################
-GET    /chili        controllers.chili.Application.index
-GET    /chili/admin  controllers.chili.Application.admin
+GET    /chili            controllers.chili.Application.index
+GET    /chili/admin      controllers.chili.Application.admin
+GET    /chili/results    controllers.chili.Application.results
 
 #    ########################
 #    #         API          #
