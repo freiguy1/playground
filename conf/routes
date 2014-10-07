@@ -68,10 +68,12 @@ GET    /chili/results    controllers.chili.Application.results
 #    ########################
 
 GET    /chili/entries         controllers.chili.Application.getEntries
+GET    /chili/adminEntries    controllers.chili.Application.getAdminEntries
 GET    /chili/entries/:id     controllers.chili.Application.getEntry(id: Int)
 PUT    /chili/entries/:id     controllers.chili.Application.updateEntry(id: Int)
 POST   /chili/entries         controllers.chili.Application.addEntry
 DELETE /chili/entries/:id     controllers.chili.Application.deleteEntry(id: Int)
+DELETE /chili/votes     controllers.chili.Application.clearVotes
 
 GET    /chili/entries/:id/votes controllers.chili.Application.getVotesByEntry(id: Int)
 POST   /chili/entries/:id/votes controllers.chili.Application.addVote(id: Int)

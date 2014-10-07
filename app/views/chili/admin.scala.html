@@ -29,6 +29,7 @@
 
         <h1 class="pull-left">Chili Competition Administration</h1>
         <button type="button" class="btn btn-primary" data-bind="click: addEntryClicked" style="margin-top: 20px; margin-left: 10px">Add Entry</button>
+        <button type="button" class="btn btn-danger" data-bind="click: clearVotesClicked" style="margin-top: 20px; margin-left: 10px">Clear Votes</button>
 
         <!-- ko foreach: entries -->
         <hr />
@@ -57,7 +58,12 @@
                     <span> by </span>
                     <span data-bind="text: chefName"></span>
                 </div>
+                <div>
                 <em data-bind="text: description"></em>
+                </div>
+                <div>
+                <a data-bind="attr: {href: editUrl}, text: editUrl"></a>
+                </div>
             </div>
             <div class="col-sm-2">
                 <div class="row">

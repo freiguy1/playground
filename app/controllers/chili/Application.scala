@@ -94,6 +94,14 @@ object Application extends Controller with securesocial.core.SecureSocial {
     Ok(views.html.chili.results(results));
   }
 
+  def getAdminEntries() = SecuredAction(new ChiliAdminAuth) { implicit request => 
+    Ok(Json.toJson(Accessor.getEntries))
+  }
+
+  def clearVotes() = SecuredAction(new ChiliAdminAuth) { implicit request => 
+    Accessor.clearVotes
+    NoContent
+  }
 
   def updateEntry(entryId: Int) = SecuredAction(true, new ChiliAdminAuth)(parse.json) { implicit request => 
     request.body.validate[EntryDto].map { updatedEntry =>
@@ -135,7 +143,6 @@ object Application extends Controller with securesocial.core.SecureSocial {
     }
   })
 }
-
 
 case class EntryDto(
   entryId: Option[Int],

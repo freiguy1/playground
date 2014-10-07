@@ -25,6 +25,18 @@ var publicAjax = {
 }
 
 var adminAjax = {
+    getEntries : function() {
+        return $.ajax({
+            type: "GET",
+            url: "/chili/adminEntries"
+        })
+    },
+    clearVotes : function() {
+        return $.ajax({
+            type: "DELETE",
+            url: "/chili/votes"
+        })
+    },
     addEntry: function(newEntry) {
         return $.ajax({
             type: "POST",

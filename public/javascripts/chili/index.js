@@ -28,16 +28,16 @@ function ChiliViewModel() {
             self.loading(false);
         });
     };
-    self.voteFor = ko.observable(new Entry('', '', '', ''));
+    self.voteFor = ko.observable(new Entry(0, '', '', '', ''));
 
     self.setVoteFor = function(entry) {
-        self.voteFor(new Entry(entry.name(), entry.number(), '', ''));
+        self.voteFor(new Entry(entry.entryId(), entry.name(), entry.number(), '', ''));
     };
 
     self.submitVote = function() {
         var voteInfo = ko.toJS(self.voteFor);
 
-        publicAjax.addVote(voteInfo.entryNumber, voteInfo.voterName, voteInfo.voterComments)
+        publicAjax.addVote(voteInfo.entryId, voteInfo.voterName, voteInfo.voterComments)
             .done(function(){
                 self.showThankYou();
             });
@@ -117,8 +117,9 @@ function ChiliViewModel() {
 
 }
 
-function Entry(entryName, entryNumber, voterName, voterComments) {
+function Entry(entryId, entryName, entryNumber, voterName, voterComments) {
     var self = this;
+    self.entryId = ko.observable(entryId);
     self.entryName = ko.observable(entryName);
     self.entryNumber = ko.observable(entryNumber);
     self.voterName = ko.observable(voterName);

@@ -34,15 +34,18 @@ initViewModel = function() {
 
 refreshData = function() {
     viewModel.loading(true)
-    publicAjax.getEntries().done(function(data) {
+    adminAjax.getEntries().done(function(data) {
         $.each(data, function(index, value) {
             if(!value.description)
                 value.description = null
+            value.editUrl = "http://" + window.location.host + "/chili/" + value.uuid
+
         })
         data.sort(function(left, right) {
             return left.number - right.number
         })
         ko.mapping.fromJS(data, {}, viewModel.entries)
+        $
         viewModel.loading(false)
     });
 }
@@ -176,7 +179,23 @@ viewModel.deleteEntryClicked = function(data) {
 
         }
     })
+}
 
+viewModel.clearVotesClicked = function(data) {
+    showConfirmModal(
+        "Clear", 
+        "Cancel", 
+        "All votes will be cleared.", 
+        function(result) {
+        if(result) {
+            adminAjax.clearVotes().done(function() {
+            }).fail(function() {
+                alert('There was a problem clearing all votes')
+            })
+        } else {
+
+        }
+    })
 }
 
 showConfirmModal = function(

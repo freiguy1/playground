@@ -50,6 +50,10 @@ object Accessor {
       .map(row => Vote(row.entryId, row.voterName, row.comment, row.time))
   }
 
+  def clearVotes(): Unit = database.withDynSession {
+    voteTable.filter(_ => true).delete
+  }
+
   /*****************
    *    ENTRIES    *
    *****************/
