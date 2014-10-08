@@ -105,7 +105,7 @@ body {
     height: 100%;
     position: absolute;
     text-align: center;
-    width: 60px;
+    width: 90px;
     z-index: 200;
 }
 
@@ -137,13 +137,13 @@ body {
 .entry-title {
     font-size: 20px;
     padding: 5px;
-    padding-left: 60px;
+    padding-left: 90px;
     text-align: center;
 }
 
 .entry-description {
     padding: 10px;
-    padding-left: 70px;
+    padding-left: 100px;
 }
 
 .entry .spiciness {
