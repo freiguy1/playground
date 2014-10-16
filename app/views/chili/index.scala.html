@@ -46,6 +46,9 @@
 
                 <h3>Contenders</h3>
                 <div class="row" data-bind="foreach: entries">
+                    <!-- ko if: $index() !== 0 && $index() % 2 === 0 -->
+                        <div class="clearfix"></div>
+                    <!-- /ko -->
                     <div class="col-sm-6">
                         <div class="entry" data-bind="css: spicyLevel().toLowerCase() + '-chili', click: $root.setVoteFor" data-toggle="modal" data-target="#vote-modal">
                             <div class="entry-number" data-bind="text: number"></div>
