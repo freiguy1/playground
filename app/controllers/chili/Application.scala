@@ -84,13 +84,10 @@ object Application extends Controller with securesocial.core.SecureSocial {
   }
 
   def results = SecuredAction(new ChiliAdminAuth) { implicit request =>
-    val results = Seq(
-      ("Chili 1", 1, 14),
-      ("Chili 2", 2, 10),
-      ("Chili 3", 3, 7),
-      ("Chili 4", 4, 5),
-      ("Chili 5", 5, 20)
-    )
+    val entries = Accessor.getEntries
+    val votes = Accessor.getVotes
+    val results = entries
+      .map(entry => (entry.name, entry.number, votes.count(_.entryId == entry.entryId)));
     Ok(views.html.chili.results(results));
   }
 
