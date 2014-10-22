@@ -41,9 +41,23 @@
                         </span>
                 </div>
 
+                <h1>And the winner is...</h1>
+
+                <hr>
+
+                <div class="winner">
+                    <span class="winner-entry-number">@results(0)._2 - </span><span class="winner-entry-name">@results(0)._1</span>
+                    <br>
+                    <span class="winner-entry-chef">Chef: @results(0)._5</span>
+                    <br>
+                    <span class="winner-entry-votes">@results(0)._3 votes</span>
+                </div>
+
+                <hr>
+
                 <h3>Results</h3>
                 <ul class="result-list">
-                    @for(result <- results.sortBy(r => 0 - r._3)) {
+                    @for(result <- results) {
                     <li>
                         <span class="result-entry-number">@result._2</span> <span class="result-entry-name"> - @result._1</span>
                         <span class="result-entry-votes">(@result._3 votes)</span>
@@ -62,7 +76,7 @@
         </div>
 
         <div class="all-comments">
-            @for(result <- results.sortBy(r => 0 - r._3)) {
+            @for(result <- results) {
                 @if(result._4.length > 0) {
                     <div class="chili-comment-display" id="comment-@(result._2)" data-entry-name="@result._1" data-entry-votes="@result._3" data-entry-chef="@result._5">
                         @for(comment <- result._4) {

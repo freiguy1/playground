@@ -1,3 +1,36 @@
+h1 {
+    font-size: 45px;
+}
+
+.winner {
+    text-align: center;
+    text-shadow: 2px 2px #3C3C3C;
+}
+
+.winner-entry-number {
+    font-size: 50px;
+}
+
+.winner-entry-name {
+    font-size: 42px;
+}
+
+.winner-entry-chef {
+    position: relative;
+    top: -10px;
+}
+
+.winner-entry-votes {
+    font-size: 40px;
+}
+
+hr {
+    border-top: 1px solid #555;
+    margin-bottom: 50px;
+    margin-top: 50px;
+    width: 50%;
+}
+
 .all-comments {
     display: none !important;
 }

@@ -88,7 +88,7 @@ object Application extends Controller with securesocial.core.SecureSocial {
     val votes = Accessor.getVotes
     val results = entries
       .map(entry => (entry.name, entry.number, votes.count(_.entryId == entry.entryId), votes.filter(vote => vote.entryId == entry.entryId && vote.comment != "").map(_.comment).flatten, entry.chefName));
-    Ok(views.html.chili.results(results));
+    Ok(views.html.chili.results(results.sortBy(r => 0 - r._3)));
   }
 
   def getAdminEntries() = SecuredAction(new ChiliAdminAuth) { implicit request => 
