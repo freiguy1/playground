@@ -80,10 +80,12 @@
                 @if(result._4.length > 0) {
                     <div class="chili-comment-display" id="comment-@(result._2)" data-entry-name="@result._1" data-entry-votes="@result._3" data-entry-chef="@result._5">
                         @for(comment <- result._4) {
-                            <div class="comment">
-                                - "@comment.trim"
-                            </div>
-                            <br>
+                            @if(comment != "") {
+                                <div class="comment">
+                                    - "@comment.trim"
+                                </div>
+                                <br>
+                            }
                         }
                     </div>
                 }

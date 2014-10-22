@@ -31,7 +31,7 @@ function ChiliViewModel() {
     self.voteFor = ko.observable(new Entry(0, '', '', '', ''));
 
     self.setVoteFor = function(entry) {
-        self.voteFor(new Entry(entry.entryId(), entry.name(), entry.number(), '', ''));
+        self.voteFor(new Entry(entry.entryId(), entry.name(), entry.number(), null, null));
     };
 
     self.submitVote = function() {
