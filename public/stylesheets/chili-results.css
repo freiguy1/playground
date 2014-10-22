@@ -1,0 +1,49 @@
+.all-comments {
+    display: none !important;
+}
+
+.chili-comment {
+    color: #ccc;
+    cursor: pointer;
+}
+
+.chili-comment:hover {
+    color: #fff;
+}
+
+.comment {
+    color: #696969;
+    font-size: 130%;
+    font-style: italic;
+}
+
+ul.result-list {
+    list-style-type: none;
+    -webkit-padding-start: 10px;
+}
+
+ul.result-list li {
+    margin-bottom: 15px;
+}
+
+.result-entry-number {
+    display: inline-block;
+    font-size: 30px;
+    width: 35px;
+}
+
+.result-entry-name {
+    display: inline-block;
+    font-size: 30px;
+}
+
+.result-entry-chef {
+    color: #777;
+    margin-left: 62px;
+    position: relative;
+    top: -7px;
+}
+
+.result-entry-votes {
+    color: #eee;
+}
