@@ -8,6 +8,7 @@
         <!-- CSS -->
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
         <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/chili-global.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/chili-public.css")">
 
         <link href="@routes.Assets.at("images/chili-favicon.ico")" rel="shortcut icon" type="image/x-icon" />
 
@@ -21,17 +22,40 @@
         <script src="@routes.Assets.at("javascripts/chili/admin.js")" type="text/javascript"></script>
         <link href='http://fonts.googleapis.com/css?family=Raleway|Rock+Salt|Bubblegum+Sans' rel='stylesheet' type='text/css'>
     </head>
-    <body class="container">
+    <body>
+        <div class="container main-content">
+            <div class="vote-container">
+                <div class="header-container">
+                    <span class="title">Chili Cook Off</span>
+                        <span class="header-deco-container">
+                            <span class="deco-line-container hidden-xs">
+                                <span class="deco-line-long"></span>
+                                <span class="deco-line-short pull-right"></span>
+                            </span>
+                            <span class="header-deco">2<sup>nd</sup><!--Second--> Annual</span>
+                            <span class="deco-line-container hidden-xs">
+                                <span class="deco-line-long"></span>
+                                <span class="deco-line-short"></span>
+                            </span>
+                        </span>
+                </div>
 
-        <ul>
-            @for(result <- results.sortBy(r => 0 - r._3)) {
-        <li>
-            <span>@result._2: </span>
-            <span>@result._1</span>
-            <span>(@result._3 votes)</span>
-        </li>
-        }
-        </ul>
+                <h3>Results</h3>
+                <ul>
+                    @for(result <- results.sortBy(r => 0 - r._3)) {
+                    <li>
+                        <span>@result._2: </span>
+                        <span>@result._1</span>
+                        <span>(@result._3 votes)</span>
+                    </li>
+                    }
+                </ul>
+            </div>
+            <div class="admin-link">
+                <a href="@controllers.chili.routes.Application.admin">Administrate</a>
+            </div>
+        </div>
+
 
     </body>
 </html>
