@@ -191,10 +191,11 @@ function getDateString(date){
     var minute = date.getMinutes()
     var hour = date.getHours()
     var ampm = hour >= 12 ? 'pm' : 'am'
+    var month = date.getMonth() + 1
     hour = hour % 12
     hour = hour ? hour: 12
     minute = minute < 10 ? '0'+minute : minute
-    return date.getMonth() + "-" + date.getDate() + "-" + date.getFullYear() + "   " + hour + ":" + minute + " " + ampm
+    return month + "-" + date.getDate() + "-" + date.getFullYear() + "   " + hour + ":" + minute + " " + ampm
 }
 
 /*--------------- AJAX -------------*/
