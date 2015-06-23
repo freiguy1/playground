@@ -26,26 +26,26 @@ $(function () {
         if (event.which == 13)
             viewModel.handleEditResult()
    })
-    
-
-
 })
 
 
 
 function initViewModel(){
-    refreshData()
+    refreshData();
 }
 
 function refreshData(){
     ajax.info().done(function(data){
-        ko.mapping.fromJS(data.competitions, {}, viewModel.competitions)        
-        ko.mapping.fromJS(data.results, {}, viewModel.results)
-        viewModel.teams.removeAll()
+        ko.mapping.fromJS(data.competitions, {}, viewModel.competitions);
+        ko.mapping.fromJS(data.results, {}, viewModel.results);
+        viewModel.teams.removeAll();
         $.each(data.teams, function(index, team){
-           viewModel.teams.push(new Team(team.teamId, team.name, team.captainName))
+           viewModel.teams.push(new Team(team.teamId, team.name, team.captainName));
         })
-        $('.score-popover').popover()
+        viewModel.bannerModalModel.name(data.nextCompetitionInfo.name);
+        viewModel.bannerModalModel.details(data.nextCompetitionInfo.details);
+        viewModel.bannerModalModel.month(data.nextCompetitionInfo.month);
+        $('.score-popover').popover();
     })
 }
 
@@ -69,6 +69,12 @@ var viewModel = {
        onYes: function(){},
        onNo: function(){}
     },
+
+    bannerModalModel: {
+       name: ko.observable(""),
+       details: ko.observable(""),
+       month: ko.observable("")
+    },
     
     addCompetitionName: ko.observable(""),
     addCompetitionInstructions: ko.observable(""),
@@ -82,6 +88,18 @@ var viewModel = {
     editResultCompetition: ko.observable(),
     editResultPointsEarned: ko.observable(""),
     editResultNotes: ko.observable("")
+}
+
+viewModel.updateBannerClicked = function() {
+   $('#bannerModal').modal('show');
+}
+
+viewModel.bannerModalModel.onSave = function() {
+    $('#bannerModal').modal('hide');
+    ajax.nextCompetitionInfo(
+       viewModel.bannerModalModel.name(),
+       viewModel.bannerModalModel.details(),
+       viewModel.bannerModalModel.month());
 }
 
 viewModel.createTeamClicked = function(){
@@ -242,6 +260,14 @@ var ajax = {
         return $.ajax({
             type: "GET",
             url: "/mcisCup/info"
+        })
+    },
+    nextCompetitionInfo : function(name, details, month) {
+        return $.ajax({
+            type: "PUT",
+            url: "/mcisCup/nextCompetitionInfo",
+            contentType: "application/json",
+            data: JSON.stringify({name: name, details: details, month: month})
         })
     },
     addTeam: function(team) {
