@@ -9,51 +9,61 @@ GET     /                           controllers.Application.index
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 #####################################
+#              VEGAS                #
+#####################################
+GET /vegas             controllers.vegas.Application.index
+
+GET  /vegas/teams           controllers.vegas.Application.getTeams
+POST /vegas/teams           controllers.vegas.Application.addTeam
+PUT  /vegas/teams/:teamId   controllers.vegas.Application.updateTeam(teamId: Int)
+DELETE /vegas/teams/:teamId controllers.vegas.Application.deleteTeam(teamId: Int)
+
+#####################################
 #             MCISCUP               #
 #####################################
-GET	/mcisCup		    controllers.mcisCup.Application.index
-GET	/mcisCup/admin		    controllers.mcisCup.Application.admin
+GET /mcisCup            controllers.mcisCup.Application.index
+GET /mcisCup/admin          controllers.mcisCup.Application.admin
 
-POST	/mcisCup/teams		    controllers.mcisCup.Application.addTeam
-DELETE	/mcisCup/teams/:teamId	    controllers.mcisCup.Application.deleteTeam(teamId: Int)
-PUT	/mcisCup/teams/:teamId	    controllers.mcisCup.Application.updateTeam(teamId: Int)
+POST    /mcisCup/teams          controllers.mcisCup.Application.addTeam
+DELETE  /mcisCup/teams/:teamId      controllers.mcisCup.Application.deleteTeam(teamId: Int)
+PUT /mcisCup/teams/:teamId      controllers.mcisCup.Application.updateTeam(teamId: Int)
 
-POST	/mcisCup/competitions			controllers.mcisCup.Application.addCompetition
-DELETE	/mcisCup/competitions/:competitionId	controllers.mcisCup.Application.deleteCompetition(competitionId: Int)
-PUT	/mcisCup/competitions/:competitionId	controllers.mcisCup.Application.updateCompetition(competitionId: Int)
+POST    /mcisCup/competitions           controllers.mcisCup.Application.addCompetition
+DELETE  /mcisCup/competitions/:competitionId    controllers.mcisCup.Application.deleteCompetition(competitionId: Int)
+PUT /mcisCup/competitions/:competitionId    controllers.mcisCup.Application.updateCompetition(competitionId: Int)
 
-PUT	/mcisCup/competitions/:competitionId/teams/:teamId  controllers.mcisCup.Application.addOrUpdateResult(competitionId: Int, teamId: Int)
+PUT /mcisCup/competitions/:competitionId/teams/:teamId  controllers.mcisCup.Application.addOrUpdateResult(competitionId: Int, teamId: Int)
 
-PUT	/mcisCup/nextCompetitionInfo		controllers.mcisCup.Application.addNextCompetitionInfo
+PUT /mcisCup/nextCompetitionInfo        controllers.mcisCup.Application.addNextCompetitionInfo
 
-GET	/mcisCup/info		    controllers.mcisCup.Application.info
+GET /mcisCup/info           controllers.mcisCup.Application.info
 
 
 #####################################
 #           BALANCE                 #
 #####################################
-GET	/balance		    controllers.balance.Application.index
-POST	/balance		    controllers.balance.Application.addTransaction(amount: Double, note: Option[String])
-GET	/balance/info		    controllers.balance.Application.getInfo
-PUT	/balance/clearTransactionsThrough/:transactionId controllers.balance.Application.clearTransactionsThrough(transactionId: Int)
+GET /balance            controllers.balance.Application.index
+POST    /balance            controllers.balance.Application.addTransaction(amount: Double, note: Option[String])
+GET /balance/info           controllers.balance.Application.getInfo
+PUT /balance/clearTransactionsThrough/:transactionId controllers.balance.Application.clearTransactionsThrough(transactionId: Int)
 
 #####################################
 #             CLONE                 #
 #####################################
 
-GET	/clone				controllers.clone.Application.index
-GET	/clone/itsMe				controllers.clone.Application.itsMe
+GET /clone              controllers.clone.Application.index
+GET /clone/itsMe                controllers.clone.Application.itsMe
 
 #    ########################
 #    #         API          #
 #    ########################
 
-GET	/clone/api/systems		controllers.clone.api.SystemApi.get
-GET	/clone/api/belts		controllers.clone.api.BeltApi.get
-POST	/clone/api/belts/:id/hasRats	controllers.clone.api.BeltApi.hasRats(id: Long)
-POST	/clone/api/belts/:id/isEmpty	controllers.clone.api.BeltApi.isEmpty(id: Long)
-PUT	/clone/api/belts/:id/clear	controllers.clone.api.BeltApi.clear(id: Long)
-GET	/clone/api/time			controllers.clone.api.BaseApi.time
+GET /clone/api/systems      controllers.clone.api.SystemApi.get
+GET /clone/api/belts        controllers.clone.api.BeltApi.get
+POST    /clone/api/belts/:id/hasRats    controllers.clone.api.BeltApi.hasRats(id: Long)
+POST    /clone/api/belts/:id/isEmpty    controllers.clone.api.BeltApi.isEmpty(id: Long)
+PUT /clone/api/belts/:id/clear  controllers.clone.api.BeltApi.clear(id: Long)
+GET /clone/api/time         controllers.clone.api.BaseApi.time
 
 
 #####################################
