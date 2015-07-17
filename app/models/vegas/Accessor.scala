@@ -33,7 +33,7 @@ object Accessor {
   def addTeam(newTeam: NewTeam): Int = defaultDb.withDynSession {
     teamTable returning teamTable.map(_.teamId) += db.Team(None, newTeam.name, newTeam.captainName, 0.0)
   }
-  
+
   def deleteTeam(teamId: Int): Unit = defaultDb.withDynSession {
     teamTable.filter(_.teamId === teamId).delete
   }
