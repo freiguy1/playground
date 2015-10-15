@@ -19,7 +19,7 @@ var colors = [
    "#fdcdac",
    "#cdb5e8",
    "#f4cae4",
-   "#e6f5c9",
+   "#bee376",
    "#fff2ae",
    "#f1e2cc"
 ];
