@@ -35,10 +35,12 @@ function ChiliViewModel() {
     };
 
     self.submitVote = function() {
+        $('button', '#vote-modal').prop('disabled', true);
         var voteInfo = ko.toJS(self.voteFor);
 
         publicAjax.addVote(voteInfo.entryId, voteInfo.voterName, voteInfo.voterComments)
             .done(function(){
+                $('button', '#vote-modal').prop('disabled', false);
                 self.showThankYou();
             });
     };
