@@ -16,6 +16,7 @@ object Application extends Controller with securesocial.core.SecureSocial {
   // implicit val entryFormat = Json.format[Entry]
 
   def index = Action { implicit request =>
+    /*
     val mockedData = Seq(
       StatusSegment(false, OffsetDateTime.of(2015, 10, 19, 12, 0, 0, 0, ZoneOffset.UTC), 60, Some("Broken")),
       StatusSegment(true, OffsetDateTime.of(2015, 10, 19, 13, 0, 0, 0, ZoneOffset.UTC), 1380, None),
@@ -27,16 +28,12 @@ object Application extends Controller with securesocial.core.SecureSocial {
       StatusSegment(true, OffsetDateTime.of(2015, 10, 22, 13, 0, 0, 0, ZoneOffset.UTC), 1380, None),
       StatusSegment(false, OffsetDateTime.of(2015, 10, 23, 12, 0, 0, 0, ZoneOffset.UTC), 60, Some("Broken")),
       StatusSegment(true, OffsetDateTime.of(2015, 10, 23, 13, 0, 0, 0, ZoneOffset.UTC), 1380, None))
-    Ok(views.html.mcisStatus.index(mockedData))
+    */
+    Ok(views.html.mcisStatus.index(Log.get))
   }
 
 }
 
-case class StatusSegment(
-  isAvailable: Boolean,
-  startDateTime: OffsetDateTime,
-  durationMinutes: Int,
-  errorText: Option[String])
 
 /*
 case class EntryDto(

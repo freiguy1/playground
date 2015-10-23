@@ -1,4 +1,4 @@
-@(segments: Seq[controllers.mcisStatus.StatusSegment])
+@(log: models.mcisStatus.Log)
 
 @import java.time.OffsetDateTime
 @*import controllers.mcisStatus.StatusSegment*@
@@ -34,7 +34,7 @@
     </body>
 
     <ul>
-    @for(segment <- segments) {
+    @for(segment <- log.segments) {
         <li>
             <span>@if(segment.isAvailable) { ON: } else { OFF: }</span>
             <span>@segment.startDateTime.toString</span>
