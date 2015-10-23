@@ -9,6 +9,11 @@ GET     /                           controllers.Application.index
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 #####################################
+#            MCIS STATUS            #
+#####################################
+GET /mcisStatus             controllers.mcisStatus.Application.index
+
+#####################################
 #              VEGAS                #
 #####################################
 GET /vegas             controllers.vegas.Application.index
