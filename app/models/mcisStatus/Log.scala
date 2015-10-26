@@ -6,9 +6,11 @@ import play.api.libs.json._
 import play.api.Play.current
 import play.api.cache.Cache
 
-import java.time.OffsetDateTime
+import java.time.{ LocalDateTime, OffsetDateTime }
 
-case class Log(segments: Seq[StatusSegment], lastRefresh: java.time.LocalDateTime)
+import scala.collection.mutable.ArrayBuffer
+
+case class Log(segments: Seq[StatusSegment], lastRefresh: LocalDateTime, lastTimestamp: OffsetDateTime)
 
 
 case class StatusSegment(
@@ -51,7 +53,7 @@ object Log {
         .filter(d => d._2.isAfter(OffsetDateTime.now.minusDays(7)))
         .reverse
 
-      val statusSegments = parsedData.foldLeft(new scala.collection.mutable.ArrayBuffer[StatusSegment]) { (segments, data) =>
+      val statusSegments = parsedData.foldLeft(new ArrayBuffer[StatusSegment]) { (segments, data) =>
         if (segments.isEmpty) {
           segments += StatusSegment.fromDataItem(data._2, data._1)
         } else if (segments.last.isAvailable != StatusSegment.dataItemIsAvailable(data._1)) {
@@ -62,13 +64,14 @@ object Log {
         }
       }
 
-      val log = Log(statusSegments, java.time.LocalDateTime.now)
+      val log = Log(statusSegments, LocalDateTime.now, parsedData.last._2)
       Cache.set(cacheKey, log)
+      println("added to cache")
     }
   }
 
   def get(): Log = {
-    Cache.getAs[Log](cacheKey).getOrElse(Log(Seq(), java.time.LocalDateTime.now))
+    Cache.getAs[Log](cacheKey).getOrElse(Log(Seq(), LocalDateTime.now, OffsetDateTime.now))
   }
 
   def update() {
@@ -85,10 +88,10 @@ object Log {
         if (parsedDataOpt.isEmpty) return
         val parsedData = parsedDataOpt.get
           .map(d => (d, OffsetDateTime.parse(d.timestamp)))
-          .filter(d => d._2.isAfter(latestLogSegmentStartTime) || d._2.equals(latestLogSegmentStartTime))
+          .filter(d => d._2.isAfter(existingLogOpt.get.lastTimestamp))
           .reverse
 
-        val statusSegments = parsedData.foldLeft(new scala.collection.mutable.ArrayBuffer[StatusSegment]) { (segments, data) =>
+        val statusSegments = parsedData.foldLeft(existingLog.toBuffer) { (segments, data) =>
           if (segments.isEmpty) {
             segments += StatusSegment.fromDataItem(data._2, data._1)
           } else if (segments.last.isAvailable != StatusSegment.dataItemIsAvailable(data._1)) {
@@ -99,7 +102,8 @@ object Log {
           }
         }
 
-        val log = Log(existingLog.dropRight(1) ++ statusSegments, java.time.LocalDateTime.now)
+        // val log = Log(existingLog.dropRight(1) ++ statusSegments, LocalDateTime.now)
+        val log = Log(statusSegments, LocalDateTime.now, parsedData.last._2)
         Cache.set(cacheKey, log)
       }
     }
