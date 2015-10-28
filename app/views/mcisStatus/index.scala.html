@@ -1,45 +1,177 @@
 @(log: models.mcisStatus.Log)
 
 @import java.time.OffsetDateTime
-@*import controllers.mcisStatus.StatusSegment*@
+@import java.time.LocalDateTime
+@import java.time.format.DateTimeFormatter
+@import models.mcisStatus.StatusSegment
+
+@lastOptionClass = @{
+    log.segments.lastOption match {
+        case Some(recent) => if(recent.isAvailable) "available" else "unavailable" 
+        case None => "no-data"
+    }
+}
+
+@dateTimeFormat(dateTime: Object) = @{
+    val stringFormat = "M/d/yyyy 'at' h:mm:ss"
+    dateTime match {
+        case date: OffsetDateTime => date.format(DateTimeFormatter.ofPattern(stringFormat)) 
+        case date: LocalDateTime => date.format(DateTimeFormatter.ofPattern(stringFormat)) 
+    }
+}
+
+@timeFormat(dateTime: Object) = @{
+    val stringFormat = "h:mm:ss"
+    dateTime match {
+        case date: OffsetDateTime => date.format(DateTimeFormatter.ofPattern(stringFormat)) 
+        case date: LocalDateTime => date.format(DateTimeFormatter.ofPattern(stringFormat)) 
+    }
+}
 
 <!DOCTYPE html>
-
 <html>
-    <head>
-        <title>MCIS Clinicals Server Status</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <!-- CSS -->
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
-        <!--
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/chili-global.css")">
-        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/chili-public.css")">
-        -->
+<head>
+    <title>MCIS Clinicals Server Status</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- CSS -->
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+    <!--
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/chili-global.css")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/chili-public.css")">
+    -->
+    <link href='https://fonts.googleapis.com/css?family=Oxygen:400,700,300' rel='stylesheet' type='text/css'>
 
+    <style type="text/css">
+        body {
+            font-family: 'Oxygen', sans-serif;
+            background-color: #F4F4F4;
+        } 
 
-    </head>
-    <body>
+        .content {
+            margin: auto;
+            width: 840px;
+        }
 
+        .available .hero{
+            background-color: #4BAE4F;
+        }
 
+        .unavailable .hero{
+            background-color: #F34235;
+        }
 
-        <!-- Javascripts -->
-        <script src="@routes.Assets.at("javascripts/jquery-1.11.1.min.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/knockout-3.0.0.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/knockout.mapping-latest.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
-        <!--
-        <script src="@routes.Assets.at("javascripts/chili/ajax.js")" type="text/javascript"></script>
-        <script src="@routes.Assets.at("javascripts/chili/index.js")" type="text/javascript"></script>
-        -->
-    </body>
+        .no-data .hero {
+            background-color: #2F2F2F;
+        }
 
-    <ul>
-    @for(segment <- log.segments) {
-        <li>
-            <span>@if(segment.isAvailable) { ON: } else { OFF: }</span>
-            <span>@segment.startDateTime.toString</span>
-            <span>for @segment.durationMinutes minutes </span>
-        </li>
-    }
-    </ul>
+        .hero {
+            color: #FFFFFF;
+            height: 320px;
+            width: 100%;
+        }
+
+        .hero .content {
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .hero .hero-title {
+            font-size: 30px;
+            font-weight: 300;
+        }
+
+        .hero .hero-subtitle {
+            font-size: 60px;
+            font-weight: 700;
+        }
+
+        .details {
+            background-color: #FFFFFF;
+            padding: 20px;
+            position: relative;
+            top: -65px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        }
+
+        .details-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .details-header h3 {
+            margin: 0;
+            padding: 0;
+        }
+
+        .details-header p {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .no-data .details p {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body class="@lastOptionClass">
+    <div class="hero">
+        <div class="content">
+            @defining(log.segments.lastOption) { mostRecent =>
+                @mostRecent match {
+                    case Some(recent) => {
+                        <div class="hero-title">MCIS Services are</div>
+                        @if(recent.isAvailable) {
+                            <div class="hero-subtitle">Up and Running</div>
+                        } else {
+                            <div class="hero-subtitle">Down</div>
+                        }
+                    }
+                    case None => {
+                        <div class="hero-subtitle">No Data Available</div>
+                    }
+                }
+            }
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="details">
+            <div class="details-header">
+                <h3>Details</h3>
+                <p>
+                    Last refreshed at @timeFormat(log.lastRefresh)
+                </p>
+            </div>
+            @defining(log.segments.lastOption) { mostRecent =>
+                @mostRecent match {
+                    case Some(recent) => {
+                        <ul>
+                            @for(segment <- log.segments) {
+                                <li>
+                                    <span>@if(segment.isAvailable) { ON: } else { OFF: }</span>
+                                    <span>@dateTimeFormat(segment.startDateTime)</span>
+                                    <span>for @segment.durationMinutes minutes </span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    case None => {
+                        <p>Something went wrong while trying to grab the data. Please try again soon by refreshing the page.</p>
+                    }
+                }
+            }
+        </div>
+    </div>
+
+    <!-- Javascripts -->
+    <script src="@routes.Assets.at("javascripts/jquery-1.11.1.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/knockout-3.0.0.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/knockout.mapping-latest.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+    <!--
+    <script src="@routes.Assets.at("javascripts/chili/ajax.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/chili/index.js")" type="text/javascript"></script>
+    -->
+</body>
 </html>
