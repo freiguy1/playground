@@ -64,7 +64,7 @@ object Log {
         }
       }
 
-      val log = Log(statusSegments, LocalDateTime.now, parsedData.last._2)
+      val log = Log(statusSegments.tail, LocalDateTime.now, parsedData.last._2)
       Cache.set(cacheKey, log)
       println("added to cache")
     }
