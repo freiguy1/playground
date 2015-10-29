@@ -44,6 +44,20 @@ body {
   font-weight: 700;
 }
 
+.hero .hero-refresh {
+  color: #EEEEEE;
+}
+
+.refresh-link {
+  border-bottom: 2px dotted #3F51B5;
+  cursor: pointer;
+  transition: all 1s;
+}
+
+.refresh-link:hover {
+  border-bottom: 2px solid #3F51B5;
+}
+
 .content-section {
   background-color: #FFFFFF;
   padding: 20px;
