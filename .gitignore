@@ -16,6 +16,7 @@ RUNNING_PID
 /.idea/
 /.idea*
 *.swp
+*.DS_Store
 
 # SENSITIVE INFORMATION
 /conf/application.conf

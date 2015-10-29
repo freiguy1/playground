@@ -48,14 +48,17 @@ body {
   color: #EEEEEE;
 }
 
-.refresh-link {
+.link {
   border-bottom: 2px dotted #3F51B5;
   cursor: pointer;
-  transition: all 1s;
 }
 
-.refresh-link:hover {
+.link:hover {
   border-bottom: 2px solid #3F51B5;
+}
+
+.paused {
+  display: none;
 }
 
 .content-section {
@@ -85,8 +88,7 @@ body {
   text-align: center;
 }
 
-.history-log {
-  background-color: #999;
+.history-log-container {
   border-radius: 20px;
   height: 40px;
   margin: 20px 0;
@@ -94,10 +96,17 @@ body {
   width: 100%;  
 }
 
+.history-log {
+  height: 100%;
+  min-width: 101%;
+  white-space: nowrap;
+}
+
 .log-segment {
   background-color: purple;
-  float: left;
+  display: inline-block;
   height: 100%;
+  margin: 0 -2px;
 }
 
 .week-stats {

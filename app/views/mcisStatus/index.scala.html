@@ -102,7 +102,13 @@
                     }
                 }
             }
-            <div class="hero-refresh"><span class="refresh-link">Refreshing</span> in <span class="refresh-time">60</span> seconds</div>
+            <div class="hero-refresh">
+                <div class="running">
+                    <span class="link refresh-link">Refreshing</span> in <span class="refresh-time">60</span> seconds. <span class="link pause-link">Pause</span></div>
+                </div>
+                <div class="paused">
+                    <span class="link start-link">Start timer</span> 
+                </div>
         </div>
     </div>
     
@@ -135,12 +141,14 @@
                     <p>Something went wrong while trying to grab the data. Please try again soon by refreshing the page.</p>
                 } else {
                     <h4>Stats for the past week</h4>
-                    <div class="history-log" data-total-time="@totalDurationTime">
-                        @for(segment <- segments) {
-                            @defining(getTimePortion(segment.durationMinutes) + "%") { portionDisplay =>
-                            <div class="log-segment show-tooltip @if(segment.isAvailable) {available} else {unavailable}" style="width: @portionDisplay;" title="@if(segment.isAvailable) {Up} else {Down} for @segment.durationMinutes minutes on @dateTimeFormat(segment.startDateTime)"></div>
-                            }
-                        } 
+                    <div class="history-log-container">
+                        <div class="history-log">
+                            @for(segment <- segments) {
+                                @defining(getTimePortion(segment.durationMinutes) + "%") { portionDisplay =>
+                                <div class="log-segment show-tooltip @if(segment.isAvailable) {available} else {unavailable}" style="width: @portionDisplay;" title="@if(segment.isAvailable) {Up} else {Down} for @segment.durationMinutes minutes on @dateTimeFormat(segment.startDateTime)"></div>
+                                }
+                            } 
+                        </div>
                     </div>
                     <div class="week-stats">
                         <div class="row">
@@ -176,30 +184,6 @@
     <!-- Javascripts -->
     <script src="@routes.Assets.at("javascripts/jquery-1.11.1.min.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
-    <script type="text/javascript">
-        (function() {
-            var date = new Date($('#last-refreshed').data('time'));
-            $('#last-refreshed').html(date.toTimeString());
-
-            $('.show-tooltip').tooltip();
-
-            $('.refresh-link').click(function(){
-                location.reload();
-            });
-
-            var refreshInterval = setInterval(refreshPage, 1000);
-
-            function refreshPage() {
-                var timeLeft = parseInt($('.refresh-time').html());
-                if(timeLeft === 0) {
-                    clearInterval(refreshInterval);
-                    location.reload();
-                } else {
-                    timeLeft -= 1;
-                    $('.refresh-time').html(timeLeft);
-                }
-            }
-        })()
-    </script>
+    <script src="@routes.Assets.at("javascripts/mcisStatus/js.js")" type="text/javascript"></script>
 </body>
 </html>
