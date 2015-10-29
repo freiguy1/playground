@@ -38,6 +38,11 @@
     }
 }
 
+@getTimePortion(time: Int) = @{
+    val portionDouble = BigDecimal(time.toDouble / totalDurationTime.toDouble).setScale(4, BigDecimal.RoundingMode.HALF_UP).toDouble 
+    portionDouble * 100
+}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -82,7 +87,13 @@
                 @if(segments.isEmpty) {
                     <p>Something went wrong while trying to grab the data. Please try again soon by refreshing the page.</p>
                 } else {
-                    <p>@totalDurationTime</p>
+                    <div class="history-log" data-total-time="@totalDurationTime">
+                        @for(segment <- segments) {
+                            @defining(getTimePortion(segment.durationMinutes) + "%") { portionDisplay =>
+                            <div class="log-segment @if(segment.isAvailable) {available} else {unavailable}" style="width: @portionDisplay;"></div>
+                            }
+                        } 
+                    </div>
                     <ul>
                         @for(segment <- segments) {
                             <li>
@@ -99,8 +110,6 @@
 
     <!-- Javascripts -->
     <script src="@routes.Assets.at("javascripts/jquery-1.11.1.min.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.at("javascripts/knockout-3.0.0.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.at("javascripts/knockout.mapping-latest.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
     <script type="text/javascript">
         (function() {
@@ -108,9 +117,5 @@
             $('#last-refreshed').html(date.toTimeString());
         })()
     </script>
-    <!--
-    <script src="@routes.Assets.at("javascripts/chili/ajax.js")" type="text/javascript"></script>
-    <script src="@routes.Assets.at("javascripts/chili/index.js")" type="text/javascript"></script>
-    -->
 </body>
 </html>

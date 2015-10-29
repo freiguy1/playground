@@ -1,69 +1,90 @@
 body {
-    font-family: 'Oxygen', sans-serif;
-    background-color: #F4F4F4;
+  font-family: 'Oxygen', sans-serif;
+  background-color: #F4F4F4;
+  margin: 0;
 } 
 
 .content {
-    margin: auto;
-    width: 840px;
+  margin: auto;
+  width: 840px;
 }
 
-.available .hero{
-    background-color: #4BAE4F;
+.available .hero,
+.available.log-segment {
+  background-color: #4BAE4F;
 }
 
-.unavailable .hero{
-    background-color: #F34235;
+.unavailable .hero,
+.unavailable.log-segment {
+  background-color: #F34235;
 }
 
 .no-data .hero {
-    background-color: #2F2F2F;
+  background-color: #2F2F2F;
 }
 
 .hero {
-    color: #FFFFFF;
-    height: 320px;
-    width: 100%;
+  color: #FFFFFF;
+  height: 320px;
+  width: 100%;
 }
 
 .hero .content {
-    padding: 80px 40px;
-    text-align: center;
+  padding: 80px 40px;
+  text-align: center;
 }
 
 .hero .hero-title {
-    font-size: 30px;
-    font-weight: 300;
+  font-size: 30px;
+  font-weight: 300;
 }
 
 .hero .hero-subtitle {
-    font-size: 60px;
-    font-weight: 700;
+  font-size: 60px;
+  font-weight: 700;
 }
 
 .details {
-    background-color: #FFFFFF;
-    padding: 20px;
-    position: relative;
-    top: -65px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  background-color: #FFFFFF;
+  padding: 20px;
+  position: relative;
+  top: -65px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
 .details-header {
-    margin-bottom: 30px;
-    text-align: center;
+  margin-bottom: 30px;
+  text-align: center;
 }
 
 .details-header h3 {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .details-header p {
-    color: #999;
-    font-size: 12px;
+  color: #999;
+  font-size: 12px;
 }
 
 .no-data .details p {
-    text-align: center;
+  text-align: center;
+}
+
+.history-log {
+  background-color: #999;
+  border-radius: 20px;
+  height: 40px;
+  overflow: hidden;
+  width: 100%;  
+}
+
+.history-log:after {
+  clear: both;
+}
+
+.log-segment {
+  background-color: purple;
+  float: left;
+  height: 100%;
 }
