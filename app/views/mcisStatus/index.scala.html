@@ -74,7 +74,8 @@
             <div class="details-header">
                 <h3>Details</h3>
                 <p>
-                    Last refreshed at @timeFormat(log.lastRefresh)
+                    Last refreshed at
+                    <span id="last-refreshed" data-time="@log.lastRefresh.toInstant(java.time.ZoneOffset.UTC).toEpochMilli"></span>
                 </p>
             </div>
             @defining(log.segments) { segments =>
@@ -102,9 +103,14 @@
     <script src="@routes.Assets.at("javascripts/knockout.mapping-latest.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
     <script type="text/javascript">
-        $(function(){
-           // alert('working');
-        });
+        (function() {
+            var date = new Date($('#last-refreshed').data('time'));
+            $('#last-refreshed').html(date.toTimeString());
+        })()
     </script>
+    <!--
+    <script src="@routes.Assets.at("javascripts/chili/ajax.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/chili/index.js")" type="text/javascript"></script>
+    -->
 </body>
 </html>
