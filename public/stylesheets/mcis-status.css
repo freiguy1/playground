@@ -44,7 +44,7 @@ body {
   font-weight: 700;
 }
 
-.details {
+.content-section {
   background-color: #FFFFFF;
   padding: 20px;
   position: relative;
@@ -52,22 +52,22 @@ body {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
-.details-header {
+.section-header {
   margin-bottom: 30px;
   text-align: center;
 }
 
-.details-header h3 {
+.section-header h3 {
   margin: 0;
   padding: 0;
 }
 
-.details-header p {
+.section-header p {
   color: #999;
   font-size: 12px;
 }
 
-.no-data .details p {
+.no-data .content-section p {
   text-align: center;
 }
 
@@ -75,16 +75,37 @@ body {
   background-color: #999;
   border-radius: 20px;
   height: 40px;
+  margin: 20px 0;
   overflow: hidden;
   width: 100%;  
-}
-
-.history-log:after {
-  clear: both;
 }
 
 .log-segment {
   background-color: purple;
   float: left;
   height: 100%;
+}
+
+.week-stats {
+  margin: 40px 0 75px 0;
+}
+
+.time-stat {
+  text-align: center;
+}
+
+.time-stat h3 {
+  margin: 0;
+}
+
+.time-stat p {
+  font-size: 18px;
+}
+
+.available-stat p {
+  color: #4BAE4F;
+}
+
+.unavailable-stat p {
+  color: #F34235;
 }

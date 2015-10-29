@@ -13,7 +13,7 @@
 }
 
 @dateTimeFormat(dateTime: Object) = @{
-    val stringFormat = "M/d/yyyy 'at' h:mm:ss"
+    val stringFormat = "M/d/yyyy 'starting at' h:mm:ss"
     dateTime match {
         case date: OffsetDateTime => date.format(DateTimeFormatter.ofPattern(stringFormat)) 
         case date: LocalDateTime => date.format(DateTimeFormatter.ofPattern(stringFormat)) 
@@ -38,9 +38,40 @@
     }
 }
 
+@totalUpTime = @{
+    if(log.segments.isEmpty){
+        0
+    } else {
+    log.segments.filter(_.isAvailable).foldLeft(0) {(sum, listItem) =>
+            sum + listItem.durationMinutes
+        }
+    }
+}
+
+@totalDownTime = @{
+    if(log.segments.isEmpty){
+        0
+    } else {
+        log.segments.filter(!_.isAvailable).foldLeft(0) {(sum, listItem) =>
+            sum + listItem.durationMinutes
+        }
+    }
+}
+
 @getTimePortion(time: Int) = @{
     val portionDouble = BigDecimal(time.toDouble / totalDurationTime.toDouble).setScale(4, BigDecimal.RoundingMode.HALF_UP).toDouble 
     portionDouble * 100
+}
+
+@minutesToHoursDisplay(minutes: Int) = @{
+    val hours = minutes.toDouble/60.0
+    val fraction = hours % 1
+    val remainingMinutes = fraction * 60
+    val roundedHours = math.round(hours)
+    val roundedMinutes = math.round(remainingMinutes)
+    val hourText = if(roundedHours != 1) " hours" else " hour"
+    val minuteText = if(roundedMinutes != 1) " minutes" else " minute"
+    roundedHours + hourText + " and " + roundedMinutes + minuteText 
 }
 
 <!DOCTYPE html>
@@ -75,8 +106,23 @@
     </div>
     
     <div class="content">
-        <div class="details">
-            <div class="details-header">
+        @defining(log.segments.lastOption) { mostRecent =>
+            @mostRecent match {
+                case Some(recent) => {
+                    @if(!recent.isAvailable) {
+                    <div class="content-section">
+                        <div class="section-header">
+                            <h3>Error</h3> 
+                        </div>
+                        <p>@recent.errorText</p>
+                    </div>
+                    }
+                }
+                case None => {}
+            }
+        }
+        <div class="content-section">
+            <div class="section-header">
                 <h3>Details</h3>
                 <p>
                     Last refreshed at
@@ -87,13 +133,31 @@
                 @if(segments.isEmpty) {
                     <p>Something went wrong while trying to grab the data. Please try again soon by refreshing the page.</p>
                 } else {
+                    <h4>Stats for the past week</h4>
                     <div class="history-log" data-total-time="@totalDurationTime">
                         @for(segment <- segments) {
                             @defining(getTimePortion(segment.durationMinutes) + "%") { portionDisplay =>
-                            <div class="log-segment @if(segment.isAvailable) {available} else {unavailable}" style="width: @portionDisplay;"></div>
+                            <div class="log-segment show-tooltip @if(segment.isAvailable) {available} else {unavailable}" style="width: @portionDisplay;" title="@if(segment.isAvailable) {Up} else {Down} for @segment.durationMinutes minutes on @dateTimeFormat(segment.startDateTime)"></div>
                             }
                         } 
                     </div>
+                    <div class="week-stats">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="available-stat time-stat">
+                                    <h3>@minutesToHoursDisplay(totalUpTime)</h3>
+                                    <p>Up</p>
+                                </div>
+                            </div> 
+                            <div class="col-sm-6"> 
+                                <div class="unavailable-stat time-stat">
+                                    <h3>@minutesToHoursDisplay(totalDownTime)</h3>
+                                    <p>Down</p>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                    <h4>Full Log</h4>
                     <ul>
                         @for(segment <- segments) {
                             <li>
@@ -115,6 +179,8 @@
         (function() {
             var date = new Date($('#last-refreshed').data('time'));
             $('#last-refreshed').html(date.toTimeString());
+
+            $('.show-tooltip').tooltip();
         })()
     </script>
 </body>
