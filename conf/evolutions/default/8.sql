@@ -1,0 +1,27 @@
+# --- !Ups
+
+CREATE TABLE soupEntry (
+    entryId INT AUTO_INCREMENT,
+    number INT NOT NULL,
+    name VARCHAR(128) NOT NULL,
+    chefName VARCHAR(128) NOT NULL,
+    spicyLevel VARCHAR(128) NOT NULL,
+    uuid VARCHAR(128) NOT NULL,
+    description VARCHAR(2048) NULL,
+    PRIMARY KEY(entryId)
+);
+
+CREATE TABLE soupVote (
+    voteId INT AUTO_INCREMENT,
+    entryId INT NOT NULL,
+    voterName VARCHAR(128) NULL,
+    comment VARCHAR(2048) NULL,
+    time TIMESTAMP NOT NULL,
+    FOREIGN KEY(entryId) REFERENCES entry(entryId),
+    PRIMARY KEY(voteId)
+);
+
+# --- !Downs
+
+drop table soupVote;
+drop table soupEntry;

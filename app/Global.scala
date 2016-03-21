@@ -7,10 +7,10 @@ import play.api.libs.concurrent.Execution.Implicits._
 
 object Global extends GlobalSettings {
   override def onStart(app: Application) {
-    initializeMcisStatusData()
-    Akka.system.scheduler.schedule(1 minutes, 1 minutes) {
-      everyMinute(app)
-    }
+    //initializeMcisStatusData()
+    //Akka.system.scheduler.schedule(1 minutes, 1 minutes) {
+      //everyMinute(app)
+    //}
   }
 
   private def everyMinute(app: Application) {

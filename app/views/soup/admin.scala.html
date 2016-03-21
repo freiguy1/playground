@@ -1,0 +1,272 @@
+@()
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Soup Voting System</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <!-- CSS -->
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/soup-global.css")">
+
+        <link href="@routes.Assets.at("images/soup-favicon.ico")" rel="shortcut icon" type="image/x-icon" />
+
+        <!-- Javascripts -->
+        <script src="@routes.Assets.at("javascripts/jquery-1.11.1.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/knockout-3.0.0.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/knockout.mapping-latest.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+
+        <script src="@routes.Assets.at("javascripts/soup/ajax.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/soup/admin.js")" type="text/javascript"></script>
+        <link href='http://fonts.googleapis.com/css?family=Raleway|Rock+Salt|Bubblegum+Sans' rel='stylesheet' type='text/css'>
+    </head>
+    <body class="container">
+        <div style="height: 100%; width: 100%; background: white; opacity: .6; z-index: 5; position: fixed;" data-bind="visible: loading">
+            <img src="@routes.Assets.at("images/loading.gif")" alt="loading..." style="position: fixed; left:50%; top:50%;"></img>
+        </div>
+        <a href="https://github.com/freiguy1/playground"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a> 
+
+        <h1 class="pull-left">Soup Competition Administration</h1>
+        <button type="button" class="btn btn-primary" data-bind="click: addEntryClicked" style="margin-top: 20px; margin-left: 10px">Add Entry</button>
+        <button type="button" class="btn btn-danger" data-bind="click: clearVotesClicked" style="margin-top: 20px; margin-left: 10px">Clear Votes</button>
+
+        <!-- ko foreach: entries -->
+        <hr />
+        <div class="row">
+            <div class="col-sm-2">
+                <div class="text-center" 
+                    data-bind="text: number"
+                    style="font-size: 60px;">
+
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div>
+                    <h4>
+                        <!-- ko if: spicyLevel() === "Mild" -->
+                        <span class="font-icon icon-fire" style="color: rgba(0,128,0,1);"></span> 
+                        <!-- /ko -->
+                        <!-- ko if: spicyLevel() === "Medium" -->
+                        <span class="font-icon icon-fire" style="color: rgba(255,255,0,1);"></span> 
+                        <!-- /ko -->
+                        <!-- ko if: spicyLevel() === "Hot" -->
+                        <span class="font-icon icon-fire" style="color: rgba(255,0,0,1);"></span> 
+                        <!-- /ko -->
+                        <span style="font-weight: bold;" data-bind="text: name"></span>
+                    </h4>
+                    <span> by </span>
+                    <span data-bind="text: chefName"></span>
+                </div>
+                <div>
+                <em data-bind="text: description"></em>
+                </div>
+                <div>
+                <a data-bind="attr: {href: editUrl}, text: editUrl"></a>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="row">
+                    <div class="col-xs-3 col-xs-offset-3 col-sm-offset-0 col-sm-12">
+                        <button 
+                            type="button" 
+                            class="btn btn-warning center-block" 
+                            style="display: block; margin-bottom: 10px"
+                            data-bind="click: $root.updateEntryClicked">Update</button>
+                    </div>
+                    <div class="col-xs-3 col-sm-12">
+                        <button 
+                            type="button" 
+                            class="btn btn-danger center-block"
+                            style="display: block;"
+                            data-bind="click: $root.deleteEntryClicked">Delete</button>
+                    </div>
+                </div>
+            </div> 
+        </div>
+        <!-- /ko -->
+        <hr />
+
+
+        <!-- ----------- MODAL DIALOGS ----------- -->
+        <div class="modal fade" id="addEntryModal" data-bind="with: addEntry">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button 
+                            type="button" 
+                            class="close" 
+                            data-dismiss="modal" 
+                            aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Add Soup Entry</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger" 
+                            data-bind="visible: displayError">
+                            There was a problem adding the soup entry.
+                        </div>
+                        <div class="form-group">
+                            <label for="addEntryNameInput">Soup Name</label>
+                            <input
+                                id="addEntryNameInput"
+                                type="text"
+                                class="form-control"
+                                placeholder="Soup Name"
+                                data-bind="value: name, valueUpdate: 'keypress'">
+                        </div>
+                        <div class="form-group">
+                            <label for="addEntryChefNameInput">Chef Name</label>
+                            <input
+                                id="addEntryChefNameInput"
+                                type="text"
+                                class="form-control"
+                                placeholder="Chef Name"
+                                data-bind="value: chefName, valueUpdate: 'keypress'">
+                        </div>
+                        <div class="form-group">
+                            <label for="addEntryNumberInput">Number</label>
+                            <input
+                                id="addEntryNumberInput"
+                                type="number"
+                                class="form-control"
+                                placeholder="Entry Number"
+                                data-bind="value: number, valueUpdate: 'keypress'">
+                        </div>
+                        <div class="form-group">
+                            <label for="addEntrySpicyLevelInput">Spicy Level</label>
+                            <select
+                                id="addEntrySpicyLevelInput"
+                                class="form-control"
+                                data-bind="value: spicyLevel">
+                                <option>Mild</option>
+                                <option>Medium</option>
+                                <option>Hot</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="addEntryDescriptionInput">Description (optional)</label>
+                            <textarea
+                                id="addEntryDescriptionInput"
+                                class="form-control"
+                                placeholder="Description"
+                                data-bind="value: description, valueUpdate: 'keypress'">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button 
+                            type="button" 
+                            class="btn btn-primary" 
+                            data-bind="click: $root.addEntryModalClicked">Add Entry</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+        <div class="modal fade" id="updateEntryModal" data-bind="with: updateEntry">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button 
+                            type="button" 
+                            class="close" 
+                            data-dismiss="modal" 
+                            aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Update Soup Entry</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-danger" 
+                            data-bind="visible: displayError">
+                            There was a problem updating the soup entry.
+                        </div>
+                        <div class="form-group">
+                            <label for="updateEntryNameInput">Soup Name</label>
+                            <input
+                                id="updateEntryNameInput"
+                                type="text"
+                                class="form-control"
+                                placeholder="Soup Name"
+                                data-bind="value: name, valueUpdate: 'keypress'">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateEntryChefNameInput">Chef Name</label>
+                            <input
+                                id="updateEntryChefNameInput"
+                                type="text"
+                                class="form-control"
+                                placeholder="Chef Name"
+                                data-bind="value: chefName, valueUpdate: 'keypress'">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateEntryNumberInput">Number</label>
+                            <input
+                                id="updateEntryNumberInput"
+                                type="number"
+                                class="form-control"
+                                placeholder="Entry Number"
+                                data-bind="value: number, valueUpdate: 'keypress'">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateEntrySpicyLevelInput">Spicy Level</label>
+                            <select
+                                id="updateEntrySpicyLevelInput"
+                                class="form-control"
+                                data-bind="value: spicyLevel">
+                                <option>Mild</option>
+                                <option>Medium</option>
+                                <option>Hot</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateEntryDescriptionInput">Description (optional)</label>
+                            <textarea
+                                id="updateEntryDescriptionInput"
+                                class="form-control"
+                                placeholder="Description"
+                                data-bind="value: description, valueUpdate: 'keypress'">
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button 
+                            type="button" 
+                            class="btn btn-primary" 
+                            data-bind="click: $root.updateEntryModalClicked">Update Entry</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+
+        <div class="modal fade" id="confirmModal" data-bind="with: confirmModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button 
+                            type="button" 
+                            class="close" 
+                            data-dismiss="modal" 
+                            aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Are You Sure?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p data-bind="text: messageText"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" data-bind="text: noText, click: function() {clicked(false)}"></button>
+                        <button 
+                            type="button" 
+                            class="btn btn-primary"
+                            data-dismiss="modal"
+                            data-bind="click: function() {clicked(true)}, text: yesText"></button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+
+    </body>
+</html>
+

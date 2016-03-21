@@ -1,0 +1,69 @@
+@(uuid: String, entryForm: Form[controllers.soup.EntryDto])
+
+@import helper._
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Soup Voting System</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <!-- CSS -->
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/bootstrap.min.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/soup-global.css")">
+        <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/soup-public.css")">
+
+        <link href="@routes.Assets.at("images/soup-favicon.ico")" rel="shortcut icon" type="image/x-icon" />
+
+        <!-- Javascripts -->
+        <script src="@routes.Assets.at("javascripts/jquery-1.11.1.min.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/knockout-3.0.0.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/knockout.mapping-latest.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/bootstrap.min.js")" type="text/javascript"></script>
+
+        <link href='http://fonts.googleapis.com/css?family=Raleway|Rock+Salt|Bubblegum+Sans' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <a href="https://github.com/freiguy1/playground"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+        <div class="loading-overlay" data-bind="visible: loading">
+            <img src="@routes.Assets.at("images/loading.gif")" alt="loading..." style="position: fixed; left:50%; top:50%;"></img>
+        </div>
+        <div class="container main-content">
+            <div class="vote-container">
+                <div class="header-container">
+                    <span class="title">Soup Cook Off</span>
+                    <span class="header-deco-container">
+                        <span class="deco-line-container hidden-xs">
+                            <span class="deco-line-long"></span>
+                            <span class="deco-line-short pull-right"></span>
+                        </span>
+                        <span class="header-deco">3<sup>rd</sup><!--Third--> Annual</span>
+                        <span class="deco-line-container hidden-xs">
+                            <span class="deco-line-long"></span>
+                            <span class="deco-line-short"></span>
+                        </span>
+                    </span>
+                </div>
+
+                <h2>Update your soup entry!</h2>
+                @form(action = controllers.soup.routes.Application.uuidUpdateEntrySubmit(uuid)) {
+                    @inputText(entryForm("name"), 'class -> "form-control", '_label -> "Soup Name", '_showConstraints -> false)
+                    @inputText(entryForm("number"), 'class -> "form-control", '_label -> "Number", '_showConstraints -> false, 'type -> "number")
+                    @inputText(entryForm("chefName"), 'class -> "form-control", '_label -> "Chef Name", '_showConstraints -> false)
+                    @select(entryForm("spicyLevel"), Seq(("Mild", "Mild"), ("Medium", "Medium"), ("Hot", "Hot")), 'class -> "form-control", '_label -> "Spiciness", '_showConstraints -> false)
+                    @textarea(entryForm("description"), 'class -> "form-control", '_label -> "Description", '_showConstraints -> false)
+
+                    <button type="submit" class="btn btn-default">Update</button>
+                }
+
+            </div>
+            <div class="admin-link">
+                <a href="@controllers.soup.routes.Application.admin">Administrate</a>
+            </div>
+        </div>
+
+        <script src="@routes.Assets.at("javascripts/soup/ajax.js")" type="text/javascript"></script>
+        <script src="@routes.Assets.at("javascripts/soup/index.js")" type="text/javascript"></script>
+    </body>
+</html>

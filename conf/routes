@@ -11,7 +11,7 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 #####################################
 #            MCIS STATUS            #
 #####################################
-GET /mcisStatus             controllers.mcisStatus.Application.index
+# GET /mcisStatus             controllers.mcisStatus.Application.index
 
 #####################################
 #              VEGAS                #
@@ -95,6 +95,31 @@ POST   /chili/entries/:id/votes controllers.chili.Application.addVote(id: Int)
 GET    /chili/:uuid             controllers.chili.Application.uuidUpdateEntry(uuid: String)
 POST   /chili/:uuid             controllers.chili.Application.uuidUpdateEntrySubmit(uuid: String)
 
+
+
+#####################################
+#              SOUP                #
+#####################################
+GET    /soup            controllers.soup.Application.index
+GET    /soup/admin      controllers.soup.Application.admin
+GET    /soup/results    controllers.soup.Application.results
+
+#    ########################
+#    #         API          #
+#    ########################
+
+GET    /soup/entries           controllers.soup.Application.getEntries
+GET    /soup/adminEntries      controllers.soup.Application.getAdminEntries
+GET    /soup/entries/:id       controllers.soup.Application.getEntry(id: Int)
+PUT    /soup/entries/:id       controllers.soup.Application.updateEntry(id: Int)
+POST   /soup/entries           controllers.soup.Application.addEntry
+DELETE /soup/entries/:id       controllers.soup.Application.deleteEntry(id: Int)
+DELETE /soup/votes             controllers.soup.Application.clearVotes
+
+GET    /soup/entries/:id/votes controllers.soup.Application.getVotesByEntry(id: Int)
+POST   /soup/entries/:id/votes controllers.soup.Application.addVote(id: Int)
+GET    /soup/:uuid             controllers.soup.Application.uuidUpdateEntry(uuid: String)
+POST   /soup/:uuid             controllers.soup.Application.uuidUpdateEntrySubmit(uuid: String)
 
 
 
